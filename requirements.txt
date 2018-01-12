@@ -1,0 +1,6 @@
+Django==1.11.9
+django-admin-sortable==2.1.2
+django-ckeditor==5.4.0
+django-js-asset==0.1.1
+Pillow==5.0.0
+pytz==2017.3

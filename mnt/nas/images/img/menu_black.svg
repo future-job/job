@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="17px" viewBox="0 0 24 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Post-&gt;-detail" transform="translate(-323.000000, -27.000000)">
+            <g id="Group-3" transform="translate(315.000000, 15.000000)">
+                <rect id="Rectangle-11" x="0" y="0" width="40" height="40"></rect>
+                <g id="menu_icon" transform="translate(8.000000, 8.000000)">
+                    <g id="Group" transform="translate(1.000000, 4.000000)" stroke="#000000" fill-rule="nonzero" fill="#000000">
+                        <path d="M21.4756,1.9966 L0.5181,1.9966 C0.2417,1.9966 0.0181,1.773 0.0181,1.4966 C0.0181,1.2202 0.2417,0.9966 0.5181,0.9966 L21.4756,0.9966 C21.752,0.9966 21.9756,1.2202 21.9756,1.4966 C21.9756,1.773 21.752,1.9966 21.4756,1.9966 Z" id="Shape"></path>
+                        <path d="M21.4756,8.998 L0.5181,8.998 C0.2417,8.998 0.0181,8.7744 0.0181,8.498 C0.0181,8.2216 0.2417,7.998 0.5181,7.998 L21.4756,7.998 C21.752,7.998 21.9756,8.2216 21.9756,8.498 C21.9756,8.7744 21.752,8.998 21.4756,8.998 Z" id="Shape"></path>
+                        <path d="M21.4756,16 L0.5181,16 C0.2417,16 0.0181,15.7764 0.0181,15.5 C0.0181,15.2236 0.2417,15 0.5181,15 L21.4756,15 C21.752,15 21.9756,15.2236 21.9756,15.5 C21.9756,15.7764 21.752,16 21.4756,16 Z" id="Shape"></path>
+                    </g>
+                    <rect id="Rectangle-path" x="0" y="0" width="24" height="24"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

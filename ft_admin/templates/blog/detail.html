@@ -1,0 +1,284 @@
+{% load i18n static %}
+
+<!Doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>Future Job</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'img/symbol.png' %}">
+
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <!-- bootstrap js -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+        <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
+    </head>
+    <body>
+        <header class="detail_header">
+            <div class="container">
+                <div class="left">
+                    <a href="list.html">
+                        <img src="{% static 'img/symbol.svg' %}" alt="symbol">
+                        <img src="{% static 'img/logo_b.svg' %}" alt="logo_white">
+                    </a>
+                </div>
+                <div class="nav">
+                    <div class="trigger" data-toggle="modal" data-target="#Modal_menu">
+                        <img src="{% static 'img/menu_black.svg' %}" class="menu_common menu_web menu_mobile">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="detail_contents">
+            <div class="section banner">
+                <div class="container">
+                    <h1 class="num">02</h1>
+                    <h2 class="title">머신러닝 machine learning</h2>
+                    <h5 class="tag">인터뷰</h5>
+                    <h5 class="date">2017. 10. 20</h5>
+                    <div class="link_area">
+                        <h3 class="subscription" data-toggle="modal" data-target="#Modal_subscription">구독하기</h3>
+                        <a href="#none"><img src="{% static 'img/share.svg' %}" alt="share icon" data-toggle="modal" data-target="#Modal_share"></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="container">
+                    <p class="contents">
+                        머신러닝을 우리말로 옮기면 '기계 학습'이라고 할 수 있는데 이것은 인공 지능을 가능하게 하는 방법 중 하나입니다. 컴퓨터는 데이터를 분석하고 스스로 학습하는 과정을 거치고 나면 패턴을 인식할 수 있는 능력을 갖추게 됩니다. 이렇게 되면 입력하지 않은 정보에 대해서도 판단, 결정할 수 있게 되는 것이지요. 이것이 바로 기계 학습이라고 합니다. 기계학습은 다시 말해, 방대한 양의 데이터 가운데 비슷한 것끼리 묶어내고 서로 관계있는 것들의 상하구조를 인식하여 이것을 바탕으로 앞으로의 행동을 예측하는 기술인 것입니다.
+                        <br><br>
+                        예를 들어, 컴퓨터에게 수많은 고양이 사진을 보여 주면서 ‘이것이 고양이 사진이다’라고 알려줍니다. 반복되는 고양이 사진 속에서 컴퓨터는 고양이가 가진 평균적인 모습에 대해 학습하게 됩니다. 기계 학습이 이뤄지고 난 이후에는 보여 주지도 않았던 고양이 사진도 고양이 사진으로 판별할 수 있게 되는 것이죠.
+                        <br><br>
+                        스마트폰의 사진첩을 이용하다보면, 사진을 분류하는 방법에 '동물', '자연', 또는 '음식'과 같은 기준이 있는 것을 알 수 있습니다. 이런 기준을 정해주면, 신기하게도 스마트폰 스스로가 저장되어 있는 사진을 분류해 냅니다. 이것 역시 스마트폰에 이미 들어있는 있는 소프트웨어가 기계 학습을 통해 어떤 이미지가 동물·자연·음식에 관한 것인지 판단할 수 있기 때문이랍니다.
+                    </p>
+                    <div class="good_btn_area">
+                        <h5>이 글이 도움이 되었다면 아래 버튼을 클릭해주세요.</h5>
+                        <div class="icon">
+                            <img src="{% static 'img/godjob_after.svg' %}">
+                            <button type="button" name="good button" value="Good Job 20" class="left">Good Job 20</button>
+                        </div>
+                        <div class="icon">
+                            <img src="{% static 'img/godjob_before.svg' %}">
+                            <button type="button" name="good button" value="Good Job 19">Good Job 19</button>
+                        </div>
+                        <h5>공유하기</h5>
+                        <div class="share">
+                            <a href="#none"><img src="{% static 'img/detail_facebook.svg' %}"></a>
+                            <a href="#none"><img src="{% static 'img/detail_twitter.svg' %}"></a>
+                            <a href="#none"><img src="{% static 'img/detail_kakao.svg' %}"></a>
+                            <a href="#none"><img src="{% static 'img/detail_link.svg' %}"></a>
+                        </div>
+
+                        <div class="prev_next">
+                            <div class="prev_next_common prev">
+                                <a href="#none">
+                                    <h5 class="prev_next_title"><i class="fa fa-angle-left" aria-hidden="true"></i> 이전글</h5>
+                                    <div class="thumbnail_common prev_thumbnail"></div>
+                                    <h5 class="title">머신러닝 Machine Learning</h5>
+                                </a>
+                            </div>
+                            <div class="prev_next_common next">
+                                <a href="#none">
+                                    <h5 class="prev_next_title">다음글 <i class="fa fa-angle-right" aria-hidden="true"></i></h5>
+                                    <div class="thumbnail_common next_thumbnail"></div>
+                                    <h5 class="title">4차 산업준비를 위한 게임 AR 전문가</h5>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="container">
+                <h5>© 2017 Future-Job All rights reserved</h5>
+                <a href="#"><img src="{% static 'img/top_btn.svg' %}" alt="top button"></a>
+            </div>
+        </footer>
+
+
+        <!-- Menu Modal -->
+        <div class="modal fade" id="Modal_menu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-menu" role="document">
+                <div class="modal-content modal-content-menu">
+                    <div class="modal_menu_nav">
+                        <div class="modal_container">
+                            <div class="logo_area">
+                                <a href="index.html">
+                                    <img src="{% static 'img/symbol.svg' %}">
+                                    <img src="{% static 'img/logo_b.svg' %}">
+                                </a>
+                            </div>
+                            <div class="menu_modal_right">
+                                <div class="subscription_btn" data-toggle="modal" data-target="#Modal_subscription">
+                                    <h3>구독하기</h3>
+                                </div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="menu">
+                            <ul>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">01</h2>
+                                                <h5 class="title">4차 산업준비를 위한 게임 AR전문가
+                                                    <span class="tag">인터뷰</span>
+                                                </h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_01"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">02</h2>
+                                                <h5 class="title">머신러닝 machine learning</h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_02"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">03</h2>
+                                                <h5 class="title">
+                                                    가상현실(VR) 공간 디자이너<span class="tag">인터뷰</span>
+                                                </h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_03"></div>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">04</h2>
+                                                <h5 class="title">4차 산업준비를 위한 게임 AR전문가</h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_04"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">05</h2>
+                                                <h5 class="title">우주여행 가이드 그 첫번째 시작은 달에서 시작한다
+                                                    <span class="tag">인터뷰</span>
+                                                </h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_05"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">06</h2>
+                                                <h5 class="title">인간 신체 디자이너와 미래의 건강</h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_06"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 구독하기 Modal -->
+        <div class="modal fade" id="Modal_subscription" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-subscription" role="document">
+                <div class="modal-content modal-content-subscription">
+                    <div class="modal_nav">
+                        <div class="modal_container">
+                            <div class="logo_area">
+                                <a href="index.html">
+                                    <img src="{% static 'img/symbol.svg' %}">
+                                    <img src="{% static 'img/logo_b.svg' %}">
+                                </a>
+                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="contants">
+                            <h1>구독받으실 이메일주소와 정보를 입력해주세요.</h1>
+                            <div class="input_form">
+                                <h5>나이와 직업 입력은 선택사항입니다.</h5>
+                                <input type="email" placeholder="이메일 주소 입력" name="이메일" class="critical_item">
+                                <input type="text" placeholder="나이를 입력해주세요." name="나이">
+                                <input type="text" placeholder="현재 직업을 입력해주세요." name="직업">
+                                <input type="submit" name="입력" value="확인">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal_share -->
+        <div class="modal fade" id="Modal_share" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-share" role="document">
+                <div class="modal-content modal-content-share">
+                    <h3 class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></h3>
+                    <div class="modal-body">
+                        <h1>POST 공유하기</h1>
+                        <h5>현재 글을 다른 친구들에게 공유해보세요.</h5>
+                        <div class="sns_area">
+                            <a href="#none"><img src="{% static 'img/facebook.svg' %}"></a>
+                            <a href="#none"><img src="{% static 'img/twitter.svg' %}"></a><br>
+                            <a href="#none"><img src="{% static 'img/kakao.svg' %}"></a>
+                            <a href="#none"><img src="{% static 'img/link.svg' %}"></a>
+                        </div>
+                        
+                    </div>
+                    <h3 class="close_btn" data-dismiss="modal">닫기</h3>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
