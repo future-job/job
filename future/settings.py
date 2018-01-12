@@ -147,7 +147,10 @@ TIME_ZONE = 'Asia/Seoul'
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 # BASE_URL = 'api.danoshop.net'
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    'mnt/static/',
+]
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # Media

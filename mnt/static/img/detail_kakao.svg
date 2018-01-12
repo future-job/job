@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>kakao</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 22.5 0 0 24.1666667 0 24.1666667 22.5"></polygon>
+    </defs>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Post-&gt;-detail" transform="translate(-198.000000, -1429.000000)">
+            <g id="Group-11" transform="translate(58.000000, 1429.000000)">
+                <g id="kakao" transform="translate(140.000000, 0.000000)">
+                    <rect id="Rectangle-3" fill="#FDEC00" x="0" y="0" width="50" height="50" rx="4"></rect>
+                    <rect id="Rectangle-4" x="0" y="0" width="50" height="50"></rect>
+                    <g id="Page-1" transform="translate(13.333333, 14.166667)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Clip-2"></g>
+                        <path d="M12.0833333,0 C5.40995,0 0,4.33422848 0,9.68068312 C0,13.1606544 2.29220833,16.211293 5.732575,17.9176031 C5.47979167,18.8734992 4.81738333,21.3814101 4.68519167,21.9180149 C4.52085833,22.5839338 4.92516667,22.5753619 5.19075833,22.3960854 C5.39835,22.2557502 8.50135,20.1174132 9.84066667,19.1945804 C10.5676,19.3038116 11.3170083,19.3616112 12.0833333,19.3616112 C18.7567167,19.3616112 24.1666667,15.0273827 24.1666667,9.68068312 C24.1666667,4.33422848 18.7567167,0 12.0833333,0" id="Fill-1" fill="#381E1F" mask="url(#mask-2)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
