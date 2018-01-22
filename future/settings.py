@@ -25,7 +25,15 @@ SECRET_KEY = 'test'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_WHITELIST = []                     #   with nginx CORS WHITE LIST, default csrf whitelist
+CSRF_WHITELIST += ['127.0.0.1:8888', 'localhost:8800']
+CSRF_WHITELIST += ['127.0.0.1:8080', 'localhost:8080']
+
+ALLOWED_HOSTS_FOR_MYDANO = []
+
+
 ALLOWED_HOSTS = []
+ALLOWED_HOSTS += ['*', 'null']
 ALLOWED_HOSTS += ['127.0.0.1', 'localhost']
 ALLOWED_HOSTS += ['13.125.30.175']
 
@@ -44,6 +52,9 @@ INSTALLED_APPS = [
     'adminsortable',
 
     'ft_admin',
+    'api',
+    # 'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -55,13 +66,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+#
+# REST_FRAMWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         # 'rest_framework.permissions.IsAdminUser',
+#     ],
+#     'PAGE_SIZE': 10
+# }
 
 ROOT_URLCONF = 'future.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -155,7 +173,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # Media
 MEDIA_ROOT = 'mnt/nas/images/'
-MEDIA_URL = '/mall/upload/'
+MEDIA_URL = '/future/upload/'
 
 #   django admin tools - Custom dashboard
 ADMIN_TOOLS_INDEX_DASHBOARD = 'danoshop.dashboard.CustomIndexDashboard'
@@ -170,7 +188,7 @@ def get_filename(filename):
 CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
 #CKEDITOR_UPLOAD_PATH = "/mnt/nas/shop/"
 # CKEDITOR_UPLOAD_PATH = ''
-CKEDITOR_UPLOAD_PATH = "uplsoads/"
+CKEDITOR_UPLOAD_PATH = "upload/"
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
 CKEDITOR_CONFIGS = {
     'default':{

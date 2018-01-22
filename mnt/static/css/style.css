@@ -142,6 +142,8 @@ header {
         text-align: center;
         cursor: pointer;
         z-index: 3; }
+        header .container .nav .trigger img {
+          margin-top: 41.5px; }
       /* line 145, /Users/SONG/Desktop/future_job/css/style.scss */
       header .container .nav .menu {
         background-color: white;
@@ -240,6 +242,7 @@ header {
         margin-left: 8px; }
       /* line 257, /Users/SONG/Desktop/future_job/css/style.scss */
       header .container .nav .trigger img {
+        margin-top: 0;
         vertical-align: middle; } }
 
 /* line 267, /Users/SONG/Desktop/future_job/css/style.scss */
@@ -819,7 +822,7 @@ footer {
               .modal .modal-dialog-menu .modal-content-menu .modal_menu_nav .modal_container .logo_area a img {
                 vertical-align: middle; }
               /* line 932, /Users/SONG/Desktop/future_job/css/style.scss */
-              .modal .modal-dialog-menu .modal-content-menu .modal_menu_nav .modal_container .logo_area a img:nth-child(1) {
+              .modal .modal-dialog-menu .modal-contentb-menu .modal_menu_nav .modal_container .logo_area a img:nth-child(1) {
                 width: 50px; }
               /* line 935, /Users/SONG/Desktop/future_job/css/style.scss */
               .modal .modal-dialog-menu .modal-content-menu .modal_menu_nav .modal_container .logo_area a img:nth-child(2) {
@@ -843,6 +846,7 @@ footer {
                 line-height: 35px;
                 text-align: center;
                 border: 2px solid #FF2570;
+                margin-top: 32.5px;
                 border-radius: 20px; }
             /* line 959, /Users/SONG/Desktop/future_job/css/style.scss */
             .modal .modal-dialog-menu .modal-content-menu .modal_menu_nav .modal_container .menu_modal_right .close {
@@ -1168,6 +1172,7 @@ footer {
         margin-right: 5px; }
         /* line 1328, /Users/SONG/Desktop/future_job/css/style.scss */
         .modal .modal-dialog-menu .modal-content-menu .modal_menu_nav .modal_container .menu_modal_right .subscription_btn h3 {
+          margin-top: 15px;
           font-size: 0.8rem;
           width: 85px;
           border: 1px solid #FF2570; }

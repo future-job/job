@@ -18,83 +18,13 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
         <!-- bootstrap js -->
-        <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
         <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
     </head>
     <body>
-        <script>
-            var getParameterByName = function (name, url) {
-                  if (!url) url = window.location.href;
-                  name = name.replace(/[\[\]]/g, "\\$&");
-                  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                      results = regex.exec(url);
-                  if (!results) return null;
-                  if (!results[2]) return '';
-                  return decodeURIComponent(results[2]);
-            }
-
-            $.get('http://127.0.0.1:8888/api/v1/content/detail/?content_no='+getParameterByName('content_no'),function(data) {
-                var detailInfo = data.data;
-                var listNum = (getParameterByName('list_no') && getParameterByName('list_no').length == 1) ? '0' + getParameterByName('list_no') : getParameterByName('list_no') ? getParameterByName('list_no') : '';
-                console.log(detailInfo);
-                $('h1.num').html(listNum);
-                $('h2.title').html(detailInfo.title);
-                $('h5.date').html(detailInfo.reg_time.split(' ')[0].replace(/-/g,'. '));
-                $('p.contents').html(detailInfo.detail_desc);
-                if(detailInfo.tag && detailInfo.tag != '일반') {
-                    $('.container h5.tag').html(detailInfo.tag);
-                } else {
-                    $('.container h5.tag').css('display', 'none');
-                }
-
-                var idList = [];
-                var contentsList = data.data.contents;
-                for(var i=1; i<=contentsList.length; i++) {
-                    var index = (i.toString().length ==1) ? "0"+i : i;
-                    $("ul.modal-body-list").append(''+
-                            '<li>' +
-                                '<a href="detail.html?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
-                                    '<div class="container">' +
-                                        '<div class="menu_title">' +
-                                            '<h2 class="num">' + index + '</h2>' +
-                                            '<h5 class="title">' + contentsList[i-1].title +
-                                                (contentsList[i-1].tag != '일반' ? '<span class="tag">' + contentsList[i-1].tag + '</span>' : '') +
-                                            '</h5>' +
-                                        '</div>' +
-                                        '<div class="thumbnail_area">' +
-                                            '<div class="thumbnail_'+ index + '"></div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</a>' +
-                            '</li>')
-
-                    idList.push(contentsList[i-1].id.toString())
-                }
-
-                var prevContent = idList.indexOf(getParameterByName('content_no')) ? contentsList[idList.indexOf(getParameterByName('content_no'))-1] : '';
-                var nextContent = idList.indexOf(getParameterByName('content_no')) != idList.length -1 ? contentsList[idList.indexOf(getParameterByName('content_no'))+1] : '';
-
-                if(prevContent) {
-                    $('.prev a')[0].href = '/detail.html?list_no=' + (prevContent.index + 1) + '&content_no=' + prevContent.id;
-                    $('.prev a h5.title').html(prevContent.title);
-                    $('.prev a div.prev_thumbnail').css('background-image', 'url(./future/upload/'+ prevContent.thumbnail +')');
-                } else {
-                    $('.prev').css('display', 'none')
-                    $('.next').css('margin-left', '50%')
-                }
-                if(nextContent) {
-                    $('.next a')[0].href = '/detail.html?list_no=' + (nextContent.index + 1) + '&content_no=' + nextContent.id;
-                    $('.next a h5.title').html(nextContent.title);
-                    $('.next a div.next_thumbnail').css('background-image', 'url(./future/upload/'+ nextContent.thumbnail +')');
-                } else {
-                    $('.next').css('display', 'none')
-                }
-            })
-
-        </script>
         <header class="detail_header">
             <div class="container">
                 <div class="left">
@@ -115,9 +45,9 @@
             <div class="section banner">
                 <div class="container">
                     <h1 class="num">02</h1>
-                    <h2 class="title"></h2>
-                    <h5 class="tag"></h5>
-                    <h5 class="date"></h5>
+                    <h2 class="title">머신러닝 machine learning</h2>
+                    <h5 class="tag">인터뷰</h5>
+                    <h5 class="date">2017. 10. 20</h5>
                     <div class="link_area">
                         <h3 class="subscription" data-toggle="modal" data-target="#Modal_subscription">구독하기</h3>
                         <a href="#none"><img src="{% static 'img/share.svg' %}" alt="share icon" data-toggle="modal" data-target="#Modal_share"></a>
@@ -128,7 +58,11 @@
             <div class="section">
                 <div class="container">
                     <p class="contents">
-
+                        머신러닝을 우리말로 옮기면 '기계 학습'이라고 할 수 있는데 이것은 인공 지능을 가능하게 하는 방법 중 하나입니다. 컴퓨터는 데이터를 분석하고 스스로 학습하는 과정을 거치고 나면 패턴을 인식할 수 있는 능력을 갖추게 됩니다. 이렇게 되면 입력하지 않은 정보에 대해서도 판단, 결정할 수 있게 되는 것이지요. 이것이 바로 기계 학습이라고 합니다. 기계학습은 다시 말해, 방대한 양의 데이터 가운데 비슷한 것끼리 묶어내고 서로 관계있는 것들의 상하구조를 인식하여 이것을 바탕으로 앞으로의 행동을 예측하는 기술인 것입니다.
+                        <br><br>
+                        예를 들어, 컴퓨터에게 수많은 고양이 사진을 보여 주면서 ‘이것이 고양이 사진이다’라고 알려줍니다. 반복되는 고양이 사진 속에서 컴퓨터는 고양이가 가진 평균적인 모습에 대해 학습하게 됩니다. 기계 학습이 이뤄지고 난 이후에는 보여 주지도 않았던 고양이 사진도 고양이 사진으로 판별할 수 있게 되는 것이죠.
+                        <br><br>
+                        스마트폰의 사진첩을 이용하다보면, 사진을 분류하는 방법에 '동물', '자연', 또는 '음식'과 같은 기준이 있는 것을 알 수 있습니다. 이런 기준을 정해주면, 신기하게도 스마트폰 스스로가 저장되어 있는 사진을 분류해 냅니다. 이것 역시 스마트폰에 이미 들어있는 있는 소프트웨어가 기계 학습을 통해 어떤 이미지가 동물·자연·음식에 관한 것인지 판단할 수 있기 때문이랍니다.
                     </p>
                     <div class="good_btn_area">
                         <h5>이 글이 도움이 되었다면 아래 버튼을 클릭해주세요.</h5>
@@ -153,14 +87,14 @@
                                 <a href="#none">
                                     <h5 class="prev_next_title"><i class="fa fa-angle-left" aria-hidden="true"></i> 이전글</h5>
                                     <div class="thumbnail_common prev_thumbnail"></div>
-                                    <h5 class="title"></h5>
+                                    <h5 class="title">머신러닝 Machine Learning</h5>
                                 </a>
                             </div>
                             <div class="prev_next_common next">
                                 <a href="#none">
                                     <h5 class="prev_next_title">다음글 <i class="fa fa-angle-right" aria-hidden="true"></i></h5>
                                     <div class="thumbnail_common next_thumbnail"></div>
-                                    <h5 class="title"></h5>
+                                    <h5 class="title">4차 산업준비를 위한 게임 AR 전문가</h5>
                                 </a>
                             </div>
                         </div>
@@ -200,7 +134,93 @@
                     </div>
                     <div class="modal-body">
                         <div class="menu">
-                            <ul class="modal-body-list"></ul>
+                            <ul>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">01</h2>
+                                                <h5 class="title">4차 산업준비를 위한 게임 AR전문가
+                                                    <span class="tag">인터뷰</span>
+                                                </h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_01"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">02</h2>
+                                                <h5 class="title">머신러닝 machine learning</h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_02"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">03</h2>
+                                                <h5 class="title">
+                                                    가상현실(VR) 공간 디자이너<span class="tag">인터뷰</span>
+                                                </h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_03"></div>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">04</h2>
+                                                <h5 class="title">4차 산업준비를 위한 게임 AR전문가</h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_04"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">05</h2>
+                                                <h5 class="title">우주여행 가이드 그 첫번째 시작은 달에서 시작한다
+                                                    <span class="tag">인터뷰</span>
+                                                </h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_05"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="detail.html">
+                                        <div class="container">
+                                            <div class="menu_title">
+                                                <h2 class="num">06</h2>
+                                                <h5 class="title">인간 신체 디자이너와 미래의 건강</h5>
+                                            </div>
+                                            <div class="thumbnail_area">
+                                                <div class="thumbnail_06"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

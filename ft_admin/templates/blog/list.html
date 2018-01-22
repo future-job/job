@@ -1,6 +1,6 @@
 {% load i18n static %}
 
-<!DOCTYPE html>
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -16,14 +16,128 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
         <!-- bootstrap js -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
         <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
+
     </head>
 
     <body>
+        <script>
+            function joinUser() {
+                var postData = {
+                    email: 'kamjik123@naver.com',
+                    age: 33,
+                    job: '프로그래머'
+                }
+                $.ajax({
+                    url: 'http://127.0.0.1:8888/api/v1/member/join/',
+                    type: 'post',
+                    data: postData,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    success: function (result) {
+                        console.log('result : ', result);
+                    }
+                })
+            }
+
+            function setCookie(cname, cvalue, exdays) {
+              var d = new Date();
+              d.setTime(d.getTime() + (exdays*24*60*60*1000));
+              var expires = "expires="+ d.toUTCString();
+              document.cookie = cname + "=" + encodeURI(cvalue) + ";" + expires + ";path=/";
+            }
+
+            function getCookie(c_name) {
+                if (document.cookie.length > 0){
+                    var c_start = document.cookie.indexOf(c_name + "=");
+                    var c_end = false;
+                    if (c_start != -1) {
+                        c_start = c_start + c_name.length + 1;
+                        c_end = document.cookie.indexOf(";", c_start);
+                        if (c_end == -1) c_end = document.cookie.length;
+                        return decodeURI(document.cookie.substring(c_start,c_end));
+                    }
+                }
+                return "";
+            }
+
+            if(!getCookie('csrftoken')) {
+                $.get('http://127.0.0.1:8888/api/v1/server/status/', function (data, textStatus, request) {
+                    console.log(requeset.getResponseHeader('csrftoken'))
+                    var x_token = request.getResponseHeader('csrftoken');
+                    setCookie('csrftoken', x_token, 365);
+                });
+            }
+
+            setTimeout(function () {
+                        joinUser()
+                    }, 3000);
+
+            $.get('http://127.0.0.1:8888/api/v1/content/list/', function(data) {
+                console.log(data);
+                console.log(data.contents);
+                var contentsList = data.contents;
+                console.log(contentsList);
+                for(var i=1; i<=contentsList.length; i++) {
+                    var index = (i.toString().length == 1) ? "0"+i : i;
+                    $("ul.carousel-indicators").append('' +
+                            '<li data-target="#carouselExampleIndicators" data-slide-to="'+ (i-1) + '"' + ((i == 1) ? ' class="active">' : '>') +
+                                '<span class="num">' + index + '</span>' +
+                            '</li>');
+                    $("ul.modal-body-list").append(''+
+                            '<li>' +
+                                '<a href="detail.html?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                    '<div class="container">' +
+                                        '<div class="menu_title">' +
+                                            '<h2 class="num">' + index + '</h2>' +
+                                            '<h5 class="title">' + contentsList[i-1].title +
+                                                (contentsList[i-1].tag && contentsList[i-1].tag != '일반' ? '<span class="tag">' + contentsList[i-1].tag + '</span>' : '') +
+                                            '</h5>' +
+                                        '</div>' +
+                                        '<div class="thumbnail_area">' +
+                                            '<div class="thumbnail_'+ index + '"></div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</a>' +
+                            '</li>');
+
+                    $("div.carousel-inner").append('' +
+                        '<div style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail + ')" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
+                            '<div class="contents_common">' +
+                                '<a href="detail.html?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                    '<h1>' + contentsList[i-1].title + '</h1>' +
+                                    (contentsList[i-1].tag && contentsList[i-1].tag != '일반' ? '<h5>' + contentsList[i-1].tag +  '</h5>' : '') +
+                                    '<p>' + contentsList[i-1].summary_desc + '</p>' +
+                                '</a>' +
+                            '</div>' +
+                            '<div class="more">' +
+                                '<a href="detail.html?list_no='+ index + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src=""></a>' +
+                            '</div>' +
+                        '</div>');
+                }
+
+            })
+
+            $(function(){
+                // Bind the swipeleftHandler callback function to the swipe event on div.box
+                $( "div.main_contianer" ).on( "swipeleft", swipeleftHandler );
+                $( "div.main_contianer" ).on( "swipeRight", swipeRightHandler );
+
+                // Callback function references the event target and adds the 'swipeleft' class to it
+                function swipeleftHandler(event) {
+                    $('carousel-control-prev').click();
+                }
+                function swipeRightHandler(event) {
+                    $('carousel-control-next').click();
+                }
+            });
+
+        </script>
         <header>
             <div class="container">
                 <div class="left">
@@ -41,97 +155,8 @@
         </header>
         <div class="main_contianer">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
-                <ul class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
-                        <span class="num">01</span>
-                    </li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1">
-                        <span class="num">02</span>
-                    </li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2">
-                        <span class="num">03</span>
-                    </li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="3">
-                        <span class="num">04</span>
-                    </li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="4">
-                        <span class="num">05</span>
-                    </li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="5">
-                        <span class="num">06</span>
-                    </li>
-                </ul>
-                <div class="carousel-inner">
-                    <div class="carousel-item carousel-item-01 active">
-                        <div class="contents_common">
-                            <a href="detail.html">
-                                <h1>4차 산업준비를 위한 게임 AR 전문가</h1>
-                                <h5>인터뷰</h5>
-                                <p>스마티빌딩, 스마트팩토리 등은 각종 물리적 기계들과 에너지 전력망, <br>그리고 이들을 제어하는 컴퓨터 등이 하나로 연결되는 통합 시스템이다.<br>이런 통합 환경 구축에 강점을 가진 글로벌 기업 PTC 최고기술책임자(CTO) 앤드루 팀은 <br>매일경제와 단독 인터뷰했다.</p>
-                            </a>
-                        </div>
-                        <div class="more">
-                            <a href="detail.html">더보기<br><img src="{% static 'img/more.svg' %}"></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item carousel-item-02">
-                        <div class="contents_common">
-                            <a href="detail.html">
-                                <h1>머신러닝 <br>machine learning</h1>
-                                <p>컴퓨터가 스스로 방대한 데이터를 분석해서 미래를 예측하는 기술. <br>머신러닝을 우리말로 옮기면 '기계 학습'이라고 할 수 있는데 이것은 인공 지능을 가능하게 하는 방법</p>
-                            </a>
-                        </div>
-                        <div class="more">
-                            <a href="detail.html">더보기<br><img src="{% static 'img/more.svg' %}"></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item carousel-item-03">
-                        <div class="contents_common">
-                            <a href="detail.html">
-                                <h1>가상현실(VR) 공간 디자이너</h1>
-                                <h5>인터뷰</h5>
-                                <p>스마트폰에 이미 들어있는 있는 소프트웨어가 기계 학습을 통해 <br>어떤 이미지가 동물·자연·음식에 관한 것인지 판단할 수 있기 때문이랍니다.</p>
-                            </a>
-                        </div>
-                        <div class="more">
-                            <a href="detail.html">더보기<br><img src="{% static 'img/more.svg' %}"></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item carousel-item-04">
-                        <div class="contents_common">
-                            <a href="detail.html">
-                                <h1>우주여행 가이드</h1>
-                                <h5>인터뷰</h5>
-                                <p>방대한 양의 데이터 가운데 비슷한 것끼리 묶어내고 서로 관계있는 <br>것들의 상하구조를 인식하여 이것을 바탕으로 앞으로의 행동을 예측하는 기술인 것입니다.</p>
-                            </a>
-                        </div>
-                        <div class="more">
-                            <a href="detail.html">더보기<br><img src="{% static 'img/more.svg' %}"></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item carousel-item-05">
-                        <div class="contents_common">
-                            <a href="detail.html">
-                                <h1>인간 신체 디자이너와 미래의 건강</h1>
-                                <p>스마트폰의 사진첩을 이용하다보면, 사진을 분류하는 방법에 '동물', '자연', 또는 <br>'음식'과 같은 기준이 있는 것을 알 수 있습니다. <br>이런 기준을 정해주면, 신기하게도 스마트폰 스스로가 저장되어 있는 사진을 분류해 냅니다</p>
-                            </a>
-                        </div>
-                        <div class="more">
-                            <a href="detail.html">더보기<br><img src="{% static 'img/more.svg' %}"></a>
-                        </div>
-                    </div>
-                    <div class="carousel-item carousel-item-06">
-                        <div class="contents_common">
-                            <a href="detail.html">
-                                <h1>인간 신체 디자이너와 미래의 건강111</h1>
-                                <p>스마트폰의 사진첩을 이용하다보면, 사진을 분류하는 방법에 '동물', '자연', 또는 '음식'과 같은 기준이 있는 것을 알 수 있습니다. <br>이런 기준을 정해주면, 신기하게도 스마트폰 스스로가 저장되어 있는 사진을 분류해 냅니다</p>
-                            </a>
-                        </div>
-                        <div class="more">
-                            <a href="detail.html">더보기<br><img src="{% static 'img/more.svg' %}"></a>
-                        </div>
-                    </div>
-                </div>
+                <ul class="carousel-indicators"></ul>
+                <div class="carousel-inner"></div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <img src="{% static 'img/left.svg' %}" alt="left">
                 </a>
@@ -165,92 +190,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="menu">
-                            <ul>
-                                <li>
-                                    <a href="detail.html">
-                                        <div class="container">
-                                            <div class="menu_title">
-                                                <h2 class="num">01</h2>
-                                                <h5 class="title">4차 산업준비를 위한 게임 AR전문가
-                                                    <span class="tag">인터뷰</span>
-                                                </h5>
-                                            </div>
-                                            <div class="thumbnail_area">
-                                                <div class="thumbnail_01"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="detail.html">
-                                        <div class="container">
-                                            <div class="menu_title">
-                                                <h2 class="num">02</h2>
-                                                <h5 class="title">머신러닝 machine learning</h5>
-                                            </div>
-                                            <div class="thumbnail_area">
-                                                <div class="thumbnail_02"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="detail.html">
-                                        <div class="container">
-                                            <div class="menu_title">
-                                                <h2 class="num">03</h2>
-                                                <h5 class="title">
-                                                    가상현실(VR) 공간 디자이너<span class="tag">인터뷰</span>
-                                                </h5>
-                                            </div>
-                                            <div class="thumbnail_area">
-                                                <div class="thumbnail_03"></div>
-                                            </div>
-                                        </div>
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="detail.html">
-                                        <div class="container">
-                                            <div class="menu_title">
-                                                <h2 class="num">04</h2>
-                                                <h5 class="title">4차 산업준비를 위한 게임 AR전문가</h5>
-                                            </div>
-                                            <div class="thumbnail_area">
-                                                <div class="thumbnail_04"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="detail.html">
-                                        <div class="container">
-                                            <div class="menu_title">
-                                                <h2 class="num">05</h2>
-                                                <h5 class="title">우주여행 가이드 그 첫번째 시작은 달에서 시작한다
-                                                    <span class="tag">인터뷰</span>
-                                                </h5>
-                                            </div>
-                                            <div class="thumbnail_area">
-                                                <div class="thumbnail_05"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="detail.html">
-                                        <div class="container">
-                                            <div class="menu_title">
-                                                <h2 class="num">06</h2>
-                                                <h5 class="title">인간 신체 디자이너와 미래의 건강</h5>
-                                            </div>
-                                            <div class="thumbnail_area">
-                                                <div class="thumbnail_06"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
+                            <ul class="modal-body-list">
                             </ul>
                         </div>
                     </div>

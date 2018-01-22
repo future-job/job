@@ -17,15 +17,20 @@ Including another URLconf
 """
 
 from django.conf.urls import include, url
+# from django.urls import path
 from django.contrib import admin
+from django.conf.urls.static import static
+from future import settings
 
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'', include('ft_admin.urls'))
-]
+    url(r'', include('ft_admin.urls')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^api/', include('api.urls')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+urlpatterns += static('/future/upload/', document_root=settings.MEDIA_ROOT)
 
 # ^ 문자열이 시작할 떄
 # $ 문자열이 끝날 때
