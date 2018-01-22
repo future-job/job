@@ -26,6 +26,39 @@
     </head>
     <body>
         <script>
+            function joinUser() {
+                var postData = {
+                    email: $('input.user_email')[0].value,
+                    age: $('input.user_age')[0].value,
+                    job: $('input.user_job')[0].value
+                }
+                if(window.location.host.indexOf('127.0.0.1') != -1) {
+                    $.ajax({
+                        url: '/api/v1/member/join/',
+                        type: 'post',
+                        data: postData,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        success: function (result) {
+                            console.log('result : ', result);
+                            if(!result.error) {
+                               alert("구독신청이 완료되었습니다");
+                                $('.modal_container button.close').click()
+                            }
+                        }
+                    })
+                } else {
+                    $.post('/api/v1/member/join/', postData, function (result) {
+                        console.log('result : ', result);
+                        if(!result.error) {
+                            alert("구독신청이 완료되었습니다");
+                            $('.modal_container button.close').click()
+                        }
+                    })
+                }
+            }
+
             var getParameterByName = function (name, url) {
                   if (!url) url = window.location.href;
                   name = name.replace(/[\[\]]/g, "\\$&");
@@ -258,10 +291,10 @@
                             <h1>구독받으실 이메일주소와 정보를 입력해주세요.</h1>
                             <div class="input_form">
                                 <h5>나이와 직업 입력은 선택사항입니다.</h5>
-                                <input type="email" placeholder="이메일 주소 입력" name="이메일" class="critical_item">
-                                <input type="text" placeholder="나이를 입력해주세요." name="나이">
-                                <input type="text" placeholder="현재 직업을 입력해주세요." name="직업">
-                                <input type="submit" name="입력" value="확인">
+                                <input type="email" placeholder="이메일 주소 입력" name="이메일" class="critical_item user_email">
+                                <input type="text" placeholder="나이를 입력해주세요." name="나이" class="user_age">
+                                <input type="text" placeholder="현재 직업을 입력해주세요." name="직업" class="user_job">
+                                <input type="submit" name="입력" value="확인" onclick="joinUser()">
                             </div>
                         </div>
                     </div>

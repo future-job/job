@@ -186,9 +186,9 @@ class ContentDetailView(View):
         else:
             content = Content.objects.get(id=content_id)
             # print content_info
-            print content.title, content.id, content.is_view, content.reg_time
+            # print content.title, content.id, content.is_view, content.reg_time
 
-            print detail
+            # print detail
             if content is None:
                 result['error'] = 602
                 result['msg'] = u'존재하지 않는 상품 정보입니다.'
