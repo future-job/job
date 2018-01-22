@@ -36,7 +36,36 @@
                   return decodeURIComponent(results[2]);
             }
 
-            $.get('http://127.0.0.1:8888/api/v1/content/detail/?content_no='+getParameterByName('content_no'),function(data) {
+            function setCookie(cname, cvalue, exdays) {
+              var d = new Date();
+              d.setTime(d.getTime() + (exdays*24*60*60*1000));
+              var expires = "expires="+ d.toUTCString();
+              document.cookie = cname + "=" + encodeURI(cvalue) + ";" + expires + ";path=/";
+            }
+
+            function getCookie(c_name) {
+                if (document.cookie.length > 0){
+                    var c_start = document.cookie.indexOf(c_name + "=");
+                    var c_end = false;
+                    if (c_start != -1) {
+                        c_start = c_start + c_name.length + 1;
+                        c_end = document.cookie.indexOf(";", c_start);
+                        if (c_end == -1) c_end = document.cookie.length;
+                        return decodeURI(document.cookie.substring(c_start,c_end));
+                    }
+                }
+                return "";
+            }
+
+            if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
+                $.get('/api/v1/server/status/', function (data, textStatus, request) {
+                    console.log(requeset.getResponseHeader('csrftoken'))
+                    var x_token = request.getResponseHeader('csrftoken');
+                    setCookie('csrftoken', x_token, 365);
+                });
+            }
+
+            $.get('/api/v1/content/detail/?content_no='+getParameterByName('content_no'),function(data) {
                 var detailInfo = data.data;
                 var listNum = (getParameterByName('list_no') && getParameterByName('list_no').length == 1) ? '0' + getParameterByName('list_no') : getParameterByName('list_no') ? getParameterByName('list_no') : '';
                 console.log(detailInfo);

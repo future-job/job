@@ -33,7 +33,7 @@
                     job: '프로그래머'
                 }
                 $.ajax({
-                    url: 'http://127.0.0.1:8888/api/v1/member/join/',
+                    url: '/api/v1/member/join/',
                     type: 'post',
                     data: postData,
                     headers: {
@@ -66,8 +66,8 @@
                 return "";
             }
 
-            if(!getCookie('csrftoken')) {
-                $.get('http://127.0.0.1:8888/api/v1/server/status/', function (data, textStatus, request) {
+            if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
+                $.get('/api/v1/server/status/', function (data, textStatus, request) {
                     console.log(requeset.getResponseHeader('csrftoken'))
                     var x_token = request.getResponseHeader('csrftoken');
                     setCookie('csrftoken', x_token, 365);
@@ -78,7 +78,7 @@
                         joinUser()
                     }, 3000);
 
-            $.get('http://127.0.0.1:8888/api/v1/content/list/', function(data) {
+            $.get('/api/v1/content/list/', function(data) {
                 console.log(data);
                 console.log(data.contents);
                 var contentsList = data.contents;
