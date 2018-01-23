@@ -123,7 +123,7 @@
                                         '<div class="menu_title">' +
                                             '<h2 class="num">' + index + '</h2>' +
                                             '<h5 class="title">' + contentsList[i-1].title +
-                                                (contentsList[i-1].tag != '일반' ? '<span class="tag">' + contentsList[i-1].tag + '</span>' : '') +
+                                                (contentsList[i-1].tag && contentsList[i-1].tag != '일반' ? '<span class="tag">' + contentsList[i-1].tag + '</span>' : '') +
                                             '</h5>' +
                                         '</div>' +
                                         '<div class="thumbnail_area">' +
