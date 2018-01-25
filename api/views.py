@@ -122,7 +122,7 @@ class ContentListView(View):
         # print '-----------------all_contents-----------------'
         # print all_contents
 
-        contents = Content.objects.filter(is_view=True).order_by('id')
+        contents = Content.objects.filter(is_view=True).order_by('-id')
         contents_list = []
 
         # print ('contents : %s', contents)
@@ -155,7 +155,7 @@ class ContentDetailView(View):
 
         content_id = int(request.GET.get('content_no', -1))
         detail = ContentDetail.objects.get(content_id=content_id)
-        contents = Content.objects.filter(is_view=True).order_by('id')
+        contents = Content.objects.filter(is_view=True).order_by('-id')
         if len(ContentCategory.objects.filter(content_id=content_id)):
             category = ContentCategory.objects.get(content_id=content_id).category_id
             tag_name = Category.objects.get(id=category).name
@@ -193,6 +193,7 @@ class ContentDetailView(View):
                 result['error'] = 602
                 result['msg'] = u'존재하지 않는 상품 정보입니다.'
             else:
+                print 3
                 data = dict()
                 data['id'] = content.id
                 data['title'] = content.title

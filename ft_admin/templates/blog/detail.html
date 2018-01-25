@@ -90,6 +90,27 @@
                 return "";
             }
 
+            function copyTextToClipboard(text) {
+                var textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+
+                try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                    console.log('Copying text command was ' + msg);
+                    alert("주소가 복사되었습니다.\n원하는 곳에 붙여넣기 해주세요.");
+                } catch (err) {
+                    console.log('Oops, unable to copy');
+                }
+                document.body.removeChild(textArea);
+            }
+
+            function CopyLink() {
+                copyTextToClipboard(location.href);
+            }
+
             if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
                 $.get('/api/v1/server/status/', function (data, textStatus, request) {
                     console.log(requeset.getResponseHeader('csrftoken'))
@@ -102,6 +123,16 @@
                 var detailInfo = data.data;
                 var listNum = (getParameterByName('list_no') && getParameterByName('list_no').length == 1) ? '0' + getParameterByName('list_no') : getParameterByName('list_no') ? getParameterByName('list_no') : '';
                 console.log(detailInfo);
+
+                var metaScript = document.createElement('meta');
+                metaScript.propertyName = 'og:image';
+                metaScript.content = './future/upload/' + detailInfo.thumbnail;
+//                document.head.appendChild(metaScript);
+                $('head').append( '<meta propery="og:title" content="Future Job">' );
+                $('head').append( '<meta propery="og:description" content="' + detailInfo.title + '">' );
+                $('head').append( '<meta propery="og:image" content="./future/upload/' + detailInfo.thumbnail + '">' );
+
+                $('.section.banner').css('backgroundImage', 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(./future/upload/' + detailInfo.thumbnail + ')');
                 $('h1.num').html(listNum);
                 $('h2.title').html(detailInfo.title);
                 $('h5.date').html(detailInfo.reg_time.split(' ')[0].replace(/-/g,'. '));
@@ -118,7 +149,7 @@
                     var index = (i.toString().length ==1) ? "0"+i : i;
                     $("ul.modal-body-list").append(''+
                             '<li>' +
-                                '<a href="detail.html?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                '<a href="detail?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<div class="container">' +
                                         '<div class="menu_title">' +
                                             '<h2 class="num">' + index + '</h2>' +
@@ -127,7 +158,7 @@
                                             '</h5>' +
                                         '</div>' +
                                         '<div class="thumbnail_area">' +
-                                            '<div class="thumbnail_'+ index + '"></div>' +
+                                            '<div class="thumbnail_'+ index + '" style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail +')"></div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</a>' +
@@ -140,7 +171,7 @@
                 var nextContent = idList.indexOf(getParameterByName('content_no')) != idList.length -1 ? contentsList[idList.indexOf(getParameterByName('content_no'))+1] : '';
 
                 if(prevContent) {
-                    $('.prev a')[0].href = '/detail.html?list_no=' + (prevContent.index + 1) + '&content_no=' + prevContent.id;
+                    $('.prev a')[0].href = '/detail?list_no=' + (prevContent.index + 1) + '&content_no=' + prevContent.id;
                     $('.prev a h5.title').html(prevContent.title);
                     $('.prev a div.prev_thumbnail').css('background-image', 'url(./future/upload/'+ prevContent.thumbnail +')');
                 } else {
@@ -148,7 +179,7 @@
                     $('.next').css('margin-left', '50%')
                 }
                 if(nextContent) {
-                    $('.next a')[0].href = '/detail.html?list_no=' + (nextContent.index + 1) + '&content_no=' + nextContent.id;
+                    $('.next a')[0].href = '/detail?list_no=' + (nextContent.index + 1) + '&content_no=' + nextContent.id;
                     $('.next a h5.title').html(nextContent.title);
                     $('.next a div.next_thumbnail').css('background-image', 'url(./future/upload/'+ nextContent.thumbnail +')');
                 } else {
@@ -160,7 +191,7 @@
         <header class="detail_header">
             <div class="container">
                 <div class="left">
-                    <a href="list.html">
+                    <a href="/">
                         <img src="{% static 'img/symbol.svg' %}" alt="symbol">
                         <img src="{% static 'img/logo_b.svg' %}" alt="logo_white">
                     </a>
@@ -207,7 +238,7 @@
                             <a href="#none"><img src="{% static 'img/detail_facebook.svg' %}"></a>
                             <a href="#none"><img src="{% static 'img/detail_twitter.svg' %}"></a>
                             <a href="#none"><img src="{% static 'img/detail_kakao.svg' %}"></a>
-                            <a href="#none"><img src="{% static 'img/detail_link.svg' %}"></a>
+                            <a onclick="CopyLink()"><img src="{% static 'img/detail_link.svg' %}"></a>
                         </div>
 
                         <div class="prev_next">
@@ -276,7 +307,7 @@
                     <div class="modal_nav">
                         <div class="modal_container">
                             <div class="logo_area">
-                                <a href="index.html">
+                                <a href="/">
                                     <img src="{% static 'img/symbol.svg' %}">
                                     <img src="{% static 'img/logo_b.svg' %}">
                                 </a>
@@ -314,7 +345,7 @@
                             <a href="#none"><img src="{% static 'img/facebook.svg' %}"></a>
                             <a href="#none"><img src="{% static 'img/twitter.svg' %}"></a><br>
                             <a href="#none"><img src="{% static 'img/kakao.svg' %}"></a>
-                            <a href="#none"><img src="{% static 'img/link.svg' %}"></a>
+                            <a onclick="CopyLink()"><img src="{% static 'img/link.svg' %}"></a>
                         </div>
                         
                     </div>

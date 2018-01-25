@@ -521,8 +521,10 @@ header {
   /* line 600, /Users/SONG/Desktop/future_job/css/style.scss */
   .detail_contents .banner {
     height: 450px;
-    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(../img/detail_banner.jpg) no-repeat center;
-    background-size: cover; }
+    /*background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(../img/detail_banner.jpg) no-repeat center;*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; }
     /* line 611, /Users/SONG/Desktop/future_job/css/style.scss */
     .detail_contents .banner .container {
       padding: 60px 0;
@@ -897,7 +899,8 @@ footer {
                   font-size: 40px;
                   font-weight: 100;
                   letter-spacing: -2px;
-                  line-height: 50px; }
+                  /*line-height: 50px;*/
+                }
                 /* line 1013, /Users/SONG/Desktop/future_job/css/style.scss */
                 .modal .modal-dialog-menu .modal-content-menu .modal-body .menu ul li a .container .menu_title .title {
                   display: inline-block;

@@ -89,13 +89,7 @@
                 });
             }
 
-            setTimeout(function () {
-                        joinUser()
-                    }, 3000);
-
             $.get('/api/v1/content/list/', function(data) {
-                console.log(data);
-                console.log(data.contents);
                 var contentsList = data.contents;
                 console.log(contentsList);
                 for(var i=1; i<=contentsList.length; i++) {
@@ -106,7 +100,7 @@
                             '</li>');
                     $("ul.modal-body-list").append(''+
                             '<li>' +
-                                '<a href="detail.html?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                '<a href="detail?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<div class="container">' +
                                         '<div class="menu_title">' +
                                             '<h2 class="num">' + index + '</h2>' +
@@ -115,7 +109,7 @@
                                             '</h5>' +
                                         '</div>' +
                                         '<div class="thumbnail_area">' +
-                                            '<div class="thumbnail_'+ index + '"></div>' +
+                                            '<div class="thumbnail_'+ index + '" style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail +')"></div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</a>' +
@@ -124,14 +118,14 @@
                     $("div.carousel-inner").append('' +
                         '<div style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail + ')" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
                             '<div class="contents_common">' +
-                                '<a href="detail.html?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                '<a href="detail?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<h1>' + contentsList[i-1].title + '</h1>' +
                                     (contentsList[i-1].tag && contentsList[i-1].tag != '일반' ? '<h5>' + contentsList[i-1].tag +  '</h5>' : '') +
                                     '<p>' + contentsList[i-1].summary_desc + '</p>' +
                                 '</a>' +
                             '</div>' +
                             '<div class="more">' +
-                                '<a href="detail.html?list_no='+ index + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src=""></a>' +
+                                '<a href="detail?list_no='+ index + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src=""></a>' +
                             '</div>' +
                         '</div>');
                 }
@@ -156,7 +150,7 @@
         <header>
             <div class="container">
                 <div class="left">
-                    <a href="list.html">
+                    <a href="/">
                         <img src="{% static 'img/symbol.svg' %}" alt="symbol">
                         <img src="{% static 'img/logo_w.svg' %}" alt="logo_white">
                     </a>
@@ -188,7 +182,7 @@
                     <div class="modal_menu_nav">
                         <div class="modal_container">
                             <div class="logo_area">
-                                <a href="index.html">
+                                <a href="/">
                                     <img src="{% static 'img/symbol.svg' %}">
                                     <img src="{% static 'img/logo_b.svg' %}">
                                 </a>
@@ -220,7 +214,7 @@
                     <div class="modal_nav">
                         <div class="modal_container">
                             <div class="logo_area">
-                                <a href="index.html">
+                                <a href="/">
                                     <img src="{% static 'img/symbol.svg' %}">
                                     <img src="{% static 'img/logo_b.svg' %}">
                                 </a>
