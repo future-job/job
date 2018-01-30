@@ -1,0 +1,61 @@
+{% load i18n static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Future Job</title>
+        <link rel="shortcut icon" type="image/png" href="http://future-job.net/static/img/symbol.png">
+
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <!-- bootstrap js -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+        <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
+    </head>
+
+    <body>
+        <header style="border-bottom: 1px solid #e7e7e7; position: initial;">
+            <div class="container">
+                <div class="left">
+                    <img src="http://future-job.net/static/img/symbol.svg" alt="symbol" style="vertical-align: middle;">
+                </div>
+                <div class="left" style="font-weight: bold; margin-left: 1%;">FUTURE JOB</div>
+                <div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">포스트 관리</div>
+                <div class="left" style="font-weight: bold; margin-left: 10%;">구독자 관리</div>
+                <div class="right" style="font-weight: bold; float: right">홈으로</div>
+            </div>
+        </header>
+        <div class="main_contianer">
+            <h1 style="max-width: 960px; margin: 50px auto 0; font-weight: bold; font-size: 20px">포스트 목록</h1>
+            <table style="width: 100%; max-width: 960px; margin: 30px auto 0; text-align: center;">
+                <colgroup>
+                    <col style="width: 5%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: auto;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 15%;" />
+                </colgroup>
+                <tr style="border-top: 2px solid #1F2532; border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;">
+                    <th style="font-weight: bold; color: #1F2532;">순서</th>
+                    <th style="font-weight: bold; color: #1F2532;">카테고리</th>
+                    <th style="text-align: left; font-weight: bold; color: #1F2532;">제목</th>
+                    <th style="font-weight: bold; color: #1F2532;">조회수</th>
+                    <th style="font-weight: bold; color: #1F2532;">Good Job</th>
+                    <th style="font-weight: bold; color: #1F2532;">액션</th>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

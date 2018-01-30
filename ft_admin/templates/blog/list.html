@@ -9,6 +9,21 @@
         <title>Future Job</title>
         <link rel="shortcut icon" type="image/png" href="{% static 'img/symbol.png' %}">
 
+        <meta property="og:title" content="Future Job">
+        <meta property="og:description" content="See the Future Job, Change Your Life">
+        <meta property="og:image" content="{% static 'img/home.jpg' %}">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112905619-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-112905619-1');
+        </script>
+
+
         <!-- bootstrap css -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
@@ -27,6 +42,23 @@
     <body>
         <script>
             function joinUser() {
+                const regexObj = {
+                    email : /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+                    age : /^(\d|[^-]-)+$/,
+                    job : /^([ㄱ-ㅎ가-힣a-zA-Z\s\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55])+$/,
+                }
+
+                if(!(regexObj.email).test($('input.user_email')[0].value)) {
+                    alert('올바른 이메일 형식이 아닙니다');
+                    return;
+                } else if(!(regexObj.age).test($('input.user_age')[0].value)) {
+                    alert('나이는 숫자만 입력 가능합니다');
+                    return;
+                } else if(!(regexObj.job).test($('input.user_job')[0].value)) {
+                    alert('직업은 한글/영문만 입력 가능합니다');
+                    return;
+                }
+
                 var postData = {
                     email: $('input.user_email')[0].value,
                     age: $('input.user_age')[0].value,
@@ -40,24 +72,37 @@
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken')
                         },
-                        success: function (result) {
+                        success: function (response) {
+                            var result = JSON.parse(response);
                             console.log('result : ', result);
                             if(!result.error) {
                                 alert("구독신청이 완료되었습니다");
+                                initInput();
                                 $('.modal_container button.close').click()
-
+                            } else {
+                                alert(result.msg)
                             }
                         }
                     })
                 } else {
-                    $.post('/api/v1/member/join/', postData, function (result) {
+                    $.post('/api/v1/member/join/', postData, function (response) {
+                        var result = JSON.parse(response);
                         console.log('result : ', result);
                         if(!result.error) {
                             alert("구독신청이 완료되었습니다");
+                            initInput();
                             $('.modal_container button.close').click()
+                        } else {
+                            alert(result.msg)
                         }
                     })
                 }
+            }
+
+            function initInput() {
+                $('input.user_email')[0].value = '';
+                $('input.user_age')[0].value = '';
+                $('input.user_job')[0].value = '';
             }
 
             function setCookie(cname, cvalue, exdays) {
@@ -81,6 +126,11 @@
                 return "";
             }
 
+            function replaceAll(str, searchStr, replaceStr) {
+                console.log(str, searchStr, replaceStr)
+                return str.split(searchStr).join(replaceStr);
+            }
+
             if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
                 $.get('/api/v1/server/status/', function (data, textStatus, request) {
                     console.log(requeset.getResponseHeader('csrftoken'))
@@ -89,9 +139,23 @@
                 });
             }
 
-            $.get('/api/v1/content/list/', function(data) {
-                var contentsList = data.contents;
-                console.log(contentsList);
+            $(function(){
+                // Bind the swipeleftHandler callback function to the swipe event on div.box
+                $( "div.main_contianer" ).on( "swipeleft", swipeleftHandler );
+                $( "div.main_contianer" ).on( "swipeRight", swipeRightHandler );
+
+                // Callback function references the event target and adds the 'swipeleft' class to it
+                function swipeleftHandler(event) {
+                    $('carousel-control-prev').click();
+                }
+                function swipeRightHandler(event) {
+                    $('carousel-control-next').click();
+                }
+            });
+
+            $(document).ready(function() {
+                var contentsList = JSON.parse("{{contents_list}}".replace(/u&#39;/g, '"').replace(/&#39;/g, '"').replace(/u&quot;/g, '"').replace(/&quot;/g, '"'));
+                console.log(contentsList)
                 for(var i=1; i<=contentsList.length; i++) {
                     var index = (i.toString().length == 1) ? "0"+i : i;
                     $("ul.carousel-indicators").append('' +
@@ -100,7 +164,7 @@
                             '</li>');
                     $("ul.modal-body-list").append(''+
                             '<li>' +
-                                '<a href="detail?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                '<a href="detail?list_no='+ i +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<div class="container">' +
                                         '<div class="menu_title">' +
                                             '<h2 class="num">' + index + '</h2>' +
@@ -118,33 +182,18 @@
                     $("div.carousel-inner").append('' +
                         '<div style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail + ')" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
                             '<div class="contents_common">' +
-                                '<a href="detail?list_no='+ index +'&content_no=' + contentsList[i-1].id + '">' +
+                                '<a href="detail?list_no='+ i +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<h1>' + contentsList[i-1].title + '</h1>' +
                                     (contentsList[i-1].tag && contentsList[i-1].tag != '일반' ? '<h5>' + contentsList[i-1].tag +  '</h5>' : '') +
-                                    '<p>' + contentsList[i-1].summary_desc + '</p>' +
+                                    '<p>' + replaceAll(contentsList[i-1].summary_desc.toString(), '&lt;br/&gt;','<br/>') + '</p>' +
                                 '</a>' +
                             '</div>' +
                             '<div class="more">' +
-                                '<a href="detail?list_no='+ index + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src=""></a>' +
+                                '<a href="detail?list_no='+ i + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src=""></a>' +
                             '</div>' +
                         '</div>');
                 }
-
             })
-
-            $(function(){
-                // Bind the swipeleftHandler callback function to the swipe event on div.box
-                $( "div.main_contianer" ).on( "swipeleft", swipeleftHandler );
-                $( "div.main_contianer" ).on( "swipeRight", swipeRightHandler );
-
-                // Callback function references the event target and adds the 'swipeleft' class to it
-                function swipeleftHandler(event) {
-                    $('carousel-control-prev').click();
-                }
-                function swipeRightHandler(event) {
-                    $('carousel-control-next').click();
-                }
-            });
 
         </script>
         <header>

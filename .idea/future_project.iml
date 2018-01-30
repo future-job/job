@@ -10,6 +10,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/ft_admin/templates" />
+        <option value="$MODULE_DIR$/libs" />
       </list>
     </option>
   </component>

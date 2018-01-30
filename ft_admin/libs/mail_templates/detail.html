@@ -1,0 +1,35 @@
+<link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
+<header class="detail_header" style="background-color: white; border-bottom: 1px solid #eee;">
+    <div class="container">
+        <div class="left">
+            <a href="http://future-job.net/">
+                <img src="http://future-job.net/static/img/symbol.svg" alt="symbol">
+                <img src="http://future-job.net/static/img/logo_b.svg" alt="logo_white">
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="detail_contents">
+    <div class="section banner" style='background : linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("{$image_url}")'>
+        <div class="container" style="max-width: 1140px; width: auto;">
+            <h2 class="title">{$title}</h2>
+            {$tag}
+            //<h5 class="tag">인터뷰</h5>
+            <h5 class="date">{$reg_date}</h5>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <p class="contents">
+                {$descript_html}
+            </p>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <h5>© 2017 Future-Job All rights reserved</h5>
+    </div>
+</footer>

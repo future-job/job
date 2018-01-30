@@ -20,51 +20,11 @@ from django.http import QueryDict
 
 from django.shortcuts import render
 from ft_admin.models import Category, Content, ContentDetail, ContentCategory, Member
-# from libs.submodels.member import Member, MemberGrade, MemberDetail, MemberTerms, TermForm, SessionStore,\
-#     MemberSession, ShoppingBasket, NonMember, SendMsgHistory, StockNotification, BankCode, MemberGradeHistory, LoginUniqueID, VerifyPossessionOfPhone
-# from libs.submodels.member_point import SerialCoupon, Mileage, MileageUsageHistory, Deposit, Coupon
-# from libs.submodels.order import Order, OrderItem, PaymentInfo, ShippingAddress, PaidCompany, OrderItemRecall, PayMethod, OrderAction, StockArrivalRemind
-# from libs.submodels.promotion import Promotion
-# from libs.submodels.product import Product, ProductOption, Category, ProductCategory, ProductDetail, Stock, \
-#     RelationProduct, TogetherBuyItem, SetProductConstruct, ProductPrice
-# from libs.submodels.shop import ShopMainPageSlider, ShopMainPageBanner
-# from libs.submodels.board import QABoard, QAProductBoard, ReviewBoard, NoticeBoard, Comment
-# from libs.payment_core import PaymentManager, IamportManager
-from django.db.models import Q, Sum, F
-from django.db.models import ObjectDoesNotExist
+from api.core import sendDetailEmail
 
-from django.forms.models import model_to_dict
 from django.views import View
-from django.http import JsonResponse
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.utils.decorators import method_decorator
-from django.views.decorators.debug import sensitive_post_parameters
-from django.views.decorators.csrf import csrf_exempt
-from django.db.models import F
-from django.core import serializers
 
-# from Crypto import Random
-# from Crypto.Cipher import AES
-
-# from libs.core import ShopErrorTable
-# from libs.core import Calc, OrderManager, ProductCacheManager, ProductManager, MemberManager, CommonManager, \
-#     OrderAdminManager, DeliveryAddCost
-# from libs.core import DeliveryManager, PaymentInfoManager, OrderInfos
-# from libs.core import to_dict, sendEventMailJoin, send_eventmail_verification
-# from libs.order_core import complete_order, cancel_order_items, exchange_order_items, complete_bank_transfer_payment, get_promotion_gift_info_of_order, update_account_num
-# from libs.core import Media, AESCipher
-# from libs.biztalk_core import BiztalkManager
-# from libs.member_core import InactiveMemberManager
-
-# from libs.tasks import send_email, send_order_contents_email, send_sms, task_send_email
-# from django_user_agents.utils import get_user_agent
-from copy import deepcopy
-import uuid
-
-from django.shortcuts import render
-
-# Create your views here.
 
 DEBUG = getattr(settings, 'DEBUG')
 CSRF_WHITELIST = getattr(settings, 'CSRF_WHITELIST')
@@ -118,14 +78,9 @@ class ContentListView(View):
     def get(self, request, **kwargs):
         result = dict()
 
-        all_contents = Content.objects.all()
-        # print '-----------------all_contents-----------------'
-        # print all_contents
-
         contents = Content.objects.filter(is_view=True).order_by('-id')
         contents_list = []
 
-        # print ('contents : %s', contents)
         for i, value in enumerate(contents):
             print len(ContentCategory.objects.filter(content_id=value.id))
             if len(ContentCategory.objects.filter(content_id=value.id)):
@@ -208,6 +163,28 @@ class ContentDetailView(View):
 
         return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
 
+class ContentLikeView(View):
+    def post(self, request, **kwargs):
+        content_id = int(request.POST.get('content_no', -1))
+        content = Content.objects.get(id=content_id)
+
+        print "content : ",
+        content.good_job = content.good_job + 1
+
+        try:
+            content.save()
+        except:
+            result = dict(error=600, msg=u"개발팀에 문의해주세요", data=dict())
+            return HttpResponse(result)
+
+        data = dict()
+        data["good_job"] = content.good_job
+
+        result = dict(error=0, msg=u"Good Job을 해주셔서 감사합니다", data=data)
+
+
+        return HttpResponse(json.dumps(result, ensure_ascii=False))
+
 class MemberJoinView(View):
     def dispatch(self, *args, **kwargs):
         return super(MemberJoinView, self).dispatch(*args, **kwargs)
@@ -285,9 +262,12 @@ class MemberJoinView(View):
             result = dict(error=601, msg=u"이메일은 필수 입력값 입니다.", data=dict())
             return HttpResponse(json.dumps(result, ensure_ascii=False))
 
-        # if check_email_exist(email):
-        #     result = dict(error=602, msg=u"이미 존재하는 E-mail입니다.", data=dict())
-        #     return HttpResponse(json.dumps(result, ensure_ascii=False))
+        def check_email_exist(email):
+            return Member.objects.filter(email=email).exists()
+
+        if check_email_exist(email):
+            result = dict(error=602, msg=u"이미 존재하는 E-mail입니다.", data=dict())
+            return HttpResponse(json.dumps(result, ensure_ascii=False))
         member.email = email
 
         # join_channel = request.POST.get('join_channel', '')
@@ -326,5 +306,41 @@ class MemberJoinView(View):
 
         #회원가입 안내메일
         # sendEventMailJoin(member)
+
+        return HttpResponse(json.dumps(result, ensure_ascii=False))
+
+class SendEmailView(View):
+    def post(self, request, **kwargs):
+        content_id = int(request.POST.get('content_no', -1))
+        member = Member.objects.values('email')
+        member_list = []
+        for i, value in enumerate(member):
+            print i, value[u'email']
+            member_list.append(value[u'email'])
+            #     category_id = ContentCategory.objects.get(content_id=value.id).category_id
+            #     tag = Category.objects.get(id=category_id).name
+            # else:
+            #     tag = ''
+            # contents_list.append({
+            #     'title': value.title,
+            #     'index': i, 'id': value.id,
+            #     'summary_desc': ContentDetail.objects.get(content_id=value.id).summary_desc.replace('\n', '<br/>'),
+            #     'thumbnail': str(ContentDetail.objects.get(content_id=value.id).image_01),
+            #     'tag': tag
+            # })
+        print "hello : ", member_list
+        sendDetailEmail(member_list, content_id)
+
+
+            # try:
+            #     content.save()
+            # except:
+            #     result = dict(error=600, msg=u"개발팀에 문의해주세요", data=dict())
+            #     return HttpResponse(result)
+
+            # data = dict()
+            # data["good_job"] = content.good_job
+
+        result = dict(error=0, msg=u"이메일 발송 완료", data=dict())
 
         return HttpResponse(json.dumps(result, ensure_ascii=False))

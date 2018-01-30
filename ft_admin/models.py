@@ -75,6 +75,7 @@ class Content(models.Model):
     title = models.CharField(max_length=64, null=False, blank=True, default='', db_index=True, verbose_name=u'제목')
     reg_time = models.DateTimeField(u'등록시간')
     mod_time = models.DateTimeField(auto_now=True)
+    good_job = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
 
     class Meta:
         db_table = 'content'

@@ -2,7 +2,7 @@
 
 from django.conf.urls import url, include
 # from views import ServerStatusView, ContentListView, ContentDetailView, SubscriptionRegisterView
-from views import ContentListView, ContentDetailView, MemberJoinView, ServerStatusView
+from views import ContentListView, ContentDetailView, MemberJoinView, ServerStatusView, ContentLikeView, SendEmailView
 
 # from rest_framework import routers
 
@@ -37,6 +37,8 @@ urlpatterns = [
     url(r'^v1/content/list/$', ContentListView.as_view(), name="main_product_view"),
     url(r'^v1/content/detail/$', ContentDetailView.as_view(), name="shop_product_detail_view"),
     url(r'^v1/member/join/$', MemberJoinView.as_view(), name="shop_product_detail_view"),
+    url(r'^v1/content/like/$', ContentLikeView.as_view(), name="shop_product_detail_view"),
+    url(r'^v1/send/email/$', SendEmailView.as_view(), name="shop_product_detail_view"),
 
 
     #   Member

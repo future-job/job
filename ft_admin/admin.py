@@ -118,7 +118,7 @@ class ContentAdmin(admin.ModelAdmin):
     list_per_page = 15
 
     #   목록 화면 설정 옵션들
-    list_display = ('id', 'title', 'reg_time', 'is_view',)
+    list_display = ('id', 'title', 'reg_time', 'good_job', 'is_view',)
     list_filter = ('is_view',)
     search_fields = ('title', )
     list_display_links = ('id', 'title',)
@@ -130,6 +130,7 @@ class ContentAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 'id',
+                'good_job',
                 # 'category',
                 'is_view',
                 'title',

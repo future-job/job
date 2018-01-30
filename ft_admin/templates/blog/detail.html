@@ -9,7 +9,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <title>Future Job</title>
+        <meta property="og:title" content="[Future Job]{{ title }}">
+        <meta property="og:description" content="{{description}}">
+        <meta property="og:image" content="http://future-job.net/future/upload/{{ thumbnail }}">
         <link rel="shortcut icon" type="image/png" href="{% static 'img/symbol.png' %}">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112905619-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-112905619-1');
+        </script>
+
 
         <!-- bootstrap css -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -23,10 +37,48 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
         <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
+
+        <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId          : 146158319429006,
+                    xfbml            : true,
+                    version          : 'v2.11'
+                });
+            };
+
+            (function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "https://connect.facebook.net/ko_KR/sdk.js";
+                 fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            Kakao.init('96478391819fe28de585688e34300cac');
+        </script>
     </head>
     <body>
         <script>
             function joinUser() {
+                const regexObj = {
+                    email : /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+                    age : /^(\d|[^-]-)+$/,
+                    job : /^([ㄱ-ㅎ가-힣a-zA-Z\s\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55])+$/,
+                }
+
+                if(!(regexObj.email).test($('input.user_email')[0].value)) {
+                    alert('올바른 이메일 형식이 아닙니다');
+                    return;
+                } else if(!(regexObj.age).test($('input.user_age')[0].value)) {
+                    alert('나이는 숫자만 입력 가능합니다');
+                    return;
+                } else if(!(regexObj.job).test($('input.user_job')[0].value)) {
+                    alert('직업은 한글/영문만 입력 가능합니다');
+                    return;
+                }
+
                 var postData = {
                     email: $('input.user_email')[0].value,
                     age: $('input.user_age')[0].value,
@@ -40,24 +92,112 @@
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken')
                         },
-                        success: function (result) {
+                        success: function (response) {
+                            var result = JSON.parse(response);
                             console.log('result : ', result);
                             if(!result.error) {
-                               alert("구독신청이 완료되었습니다");
+                                alert("구독신청이 완료되었습니다");
+                                initInput();
                                 $('.modal_container button.close').click()
+                            } else {
+                                alert(result.msg)
                             }
                         }
                     })
                 } else {
-                    $.post('/api/v1/member/join/', postData, function (result) {
+                    $.post('/api/v1/member/join/', postData, function (response) {
+                        var result = JSON.parse(response);
                         console.log('result : ', result);
                         if(!result.error) {
                             alert("구독신청이 완료되었습니다");
+                            initInput();
                             $('.modal_container button.close').click()
+                        } else {
+                            alert(result.msg)
                         }
                     })
                 }
             }
+
+            function initInput() {
+                $('input.user_email')[0].value = '';
+                $('input.user_age')[0].value = '';
+                $('input.user_job')[0].value = '';
+            }
+
+            function sendEmail() {
+                var postData = { content_no: getParameterByName('content_no') };
+                if(window.location.host.indexOf('127.0.0.1') != -1) {
+                    $.ajax({
+                        url: '/api/v1/send/email/',
+                        type: 'post',
+                        data: postData,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert("이메일이 발송되었습니다");
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                } else {
+                    $.post('/api/v1/send/email/', postData, function (response) {
+                        var result = JSON.parse(response);
+                        console.log('result : ', result);
+                        if(!result.error) {
+                            alert("이메일이 발송되었습니다");
+                        } else {
+                            alert(result.msg)
+                        }
+                    })
+                }
+            }
+
+            function fbShare() {
+                  FB.ui({
+                        method: 'share',
+                        mobile_iframe: true,
+                        href: location.href,
+                  }, function(response){});
+            }
+
+            function kakaoShare() {
+                var isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase());
+                if (isMobile) {
+                    var firstImg = $(".imageblock:first-of-type img")
+                    var contents = ""
+                    if (firstImg.attr("src")) {
+                        var firstImgSrc = firstImg.attr("src")
+                        var firstImgRatio = parseInt(firstImg.css("height")) / parseInt(firstImg.css("width"))
+                        if (firstImgRatio <= 0.27) var firstImgRatio = 0.27
+                    } else {
+                        var firstImgSrc = location.origin + "/favicon.ico"
+                        var firstImgRatio = 1
+                    }
+
+                    Kakao.Link.sendTalkLink({
+                        label: "{{title}}",
+                        image: {
+                            src: "http://future-job.net/future/upload/{{ thumbnail }}",
+                            width: 300,
+                            height: parseInt(300 * firstImgRatio)
+                        }
+                    })
+                } else {
+                    copyLink();
+                }
+            }
+
+            function twitterShare() {
+                var url = "http://twitter.com/intent/tweet?" + "&hashtags=퓨처잡,futurejob&text=[Future Job]{{title}}&url=" + location.href;
+                window.open(url, "트위터에 공유하기")
+            }
+
 
             var getParameterByName = function (name, url) {
                   if (!url) url = window.location.href;
@@ -107,7 +247,7 @@
                 document.body.removeChild(textArea);
             }
 
-            function CopyLink() {
+            function copyLink() {
                 copyTextToClipboard(location.href);
             }
 
@@ -119,18 +259,53 @@
                 });
             }
 
+            function clickGoodjob() {
+                console.log(event.target.className)
+                if (event.target.className.indexOf("left") != -1) {
+                    alert("이미 Good Job을 눌러주셨습니다.")
+                    return;
+                } else {
+                    var postData = {
+                        content_no: getParameterByName('content_no')
+                    }
+                    if (window.location.host.indexOf('127.0.0.1') != -1) {
+                        $.ajax({
+                            url: '/api/v1/content/like/',
+                            type: 'post',
+                            data: postData,
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            success: function (response) {
+                                result = JSON.parse(response)
+                                console.log('result : ', result);
+                                if(!result.error) {
+                                    // alert(result.msg);
+                                    event.target.innerHTML = "Good Job " + result.data.good_job;
+                                    $("#goodJobBtn")[0].className = 'left';
+                                    $("#goodJobImg")[0].src = $("#goodJobImg")[0].src.replace('before', 'after');
+                                }
+                            }
+                        })
+                    } else {
+                        $.post('/api/v1/content/like/', postData, function (response) {
+                            result = JSON.parse(response)
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                // alert(result.msg);
+                                event.target.innerHTML = "Good Job " + result.data.good_job;
+                                $("#goodJobBtn")[0].className = 'left';
+                                $("#goodJobImg")[0].src = $("#goodJobImg")[0].src.replace('before', 'after');
+                            }
+                        })
+                    }
+                }
+            }
+
             $.get('/api/v1/content/detail/?content_no='+getParameterByName('content_no'),function(data) {
                 var detailInfo = data.data;
                 var listNum = (getParameterByName('list_no') && getParameterByName('list_no').length == 1) ? '0' + getParameterByName('list_no') : getParameterByName('list_no') ? getParameterByName('list_no') : '';
                 console.log(detailInfo);
-
-                var metaScript = document.createElement('meta');
-                metaScript.propertyName = 'og:image';
-                metaScript.content = './future/upload/' + detailInfo.thumbnail;
-//                document.head.appendChild(metaScript);
-                $('head').append( '<meta propery="og:title" content="Future Job">' );
-                $('head').append( '<meta propery="og:description" content="' + detailInfo.title + '">' );
-                $('head').append( '<meta propery="og:image" content="./future/upload/' + detailInfo.thumbnail + '">' );
 
                 $('.section.banner').css('backgroundImage', 'linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(./future/upload/' + detailInfo.thumbnail + ')');
                 $('h1.num').html(listNum);
@@ -187,6 +362,7 @@
                 }
             })
 
+//            sendEmail();
         </script>
         <header class="detail_header">
             <div class="container">
@@ -226,19 +402,15 @@
                     <div class="good_btn_area">
                         <h5>이 글이 도움이 되었다면 아래 버튼을 클릭해주세요.</h5>
                         <div class="icon">
-                            <img src="{% static 'img/godjob_after.svg' %}">
-                            <button type="button" name="good button" value="Good Job 20" class="left">Good Job 20</button>
-                        </div>
-                        <div class="icon">
-                            <img src="{% static 'img/godjob_before.svg' %}">
-                            <button type="button" name="good button" value="Good Job 19">Good Job 19</button>
+                            <img id="goodJobImg" src="{% static 'img/godjob_before.svg' %}">
+                            <button id="goodJobBtn" type="button" name="good button" onclick="clickGoodjob()">Good Job {{goodjob}}</button>
                         </div>
                         <h5>공유하기</h5>
                         <div class="share">
-                            <a href="#none"><img src="{% static 'img/detail_facebook.svg' %}"></a>
-                            <a href="#none"><img src="{% static 'img/detail_twitter.svg' %}"></a>
-                            <a href="#none"><img src="{% static 'img/detail_kakao.svg' %}"></a>
-                            <a onclick="CopyLink()"><img src="{% static 'img/detail_link.svg' %}"></a>
+                            <a onclick="fbShare()"><img src="{% static 'img/detail_facebook.svg' %}"></a>
+                            <a onclick="twitterShare()"><img src="{% static 'img/detail_twitter.svg' %}"></a>
+                            <a onclick="kakaoShare()"><img src="{% static 'img/detail_kakao.svg' %}"></a>
+                            <a onclick="copyLink()"><img src="{% static 'img/detail_link.svg' %}"></a>
                         </div>
 
                         <div class="prev_next">
@@ -342,10 +514,10 @@
                         <h1>POST 공유하기</h1>
                         <h5>현재 글을 다른 친구들에게 공유해보세요.</h5>
                         <div class="sns_area">
-                            <a href="#none"><img src="{% static 'img/facebook.svg' %}"></a>
-                            <a href="#none"><img src="{% static 'img/twitter.svg' %}"></a><br>
-                            <a href="#none"><img src="{% static 'img/kakao.svg' %}"></a>
-                            <a onclick="CopyLink()"><img src="{% static 'img/link.svg' %}"></a>
+                            <a onclick="fbShare()"><img src="{% static 'img/facebook.svg' %}"></a>
+                            <a onclick="twitterShare()"><img src="{% static 'img/twitter.svg' %}"></a><br>
+                            <a onclick="kakaoShare()"><img src="{% static 'img/kakao.svg' %}"></a>
+                            <a onclick="copyLink()"><img src="{% static 'img/link.svg' %}"></a>
                         </div>
                         
                     </div>
@@ -353,5 +525,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- Channel Plugin Scripts -->
+        <script>
+            window.channelPluginSettings = {
+                "pluginKey": "575f6f1d-27e6-4696-972c-5d4fd181a238"
+            };
+            (function() {
+                var node = document.createElement('div');
+                node.id = 'ch-plugin';
+                document.body.appendChild(node);
+                var async_load = function() {
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.src = '//cdn.channel.io/plugin/ch-plugin-web.js';
+                    s.charset = 'UTF-8';
+                    var x = document.getElementsByTagName('script')[0];
+                    x.parentNode.insertBefore(s, x);
+                };
+                if (window.attachEvent) {
+                    window.attachEvent('onload', async_load);
+                } else {
+                    window.addEventListener('load', async_load, false);
+                }
+            })();
+        </script>
+        <!-- End Channel Plugin -->
     </body>
 </html>
