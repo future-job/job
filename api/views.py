@@ -104,6 +104,36 @@ class ContentListView(View):
 
         return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
 
+class AdminContentListView(View):
+    def get(self, request, **kwargs):
+        result = dict()
+
+        contents = Content.objects.filter(is_view=True).order_by('-id')
+        contents_list = []
+
+        for i, value in enumerate(contents):
+            print len(ContentCategory.objects.filter(content_id=value.id))
+            if len(ContentCategory.objects.filter(content_id=value.id)):
+                category_id = ContentCategory.objects.get(content_id=value.id).category_id
+                tag = Category.objects.get(id=category_id).name
+            else:
+                tag = ''
+            contents_list.append({
+                'title': value.title,
+                'index': i,
+                'id': value.id,
+                'tag': tag,
+                'good_job': value.good_job,
+
+            })
+        print ('contents_list : %s', contents_list)
+
+        # contents_temp = serializers.serialize('json', contents_list)
+
+        result['contents'] = contents_list
+        result['error'] = 0
+
+        return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
 class ContentDetailView(View):
     def get(self, request, **kwargs):
         result = dict()
@@ -168,7 +198,7 @@ class ContentLikeView(View):
         content_id = int(request.POST.get('content_no', -1))
         content = Content.objects.get(id=content_id)
 
-        print "content : ",
+        # print "content : ",
         content.good_job = content.good_job + 1
 
         try:

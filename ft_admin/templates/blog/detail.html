@@ -98,7 +98,7 @@
                             if(!result.error) {
                                 alert("구독신청이 완료되었습니다");
                                 initInput();
-                                $('.modal_container button.close').click()
+                                modalClose();
                             } else {
                                 alert(result.msg)
                             }
@@ -117,6 +117,10 @@
                         }
                     })
                 }
+            }
+
+            function modalClose() {
+                $('.modal_container button.close').click()
             }
 
             function initInput() {
@@ -230,25 +234,34 @@
                 return "";
             }
 
-            function copyTextToClipboard(text) {
+            function copyTextToClipboard(text, index) {
                 var textArea = document.createElement("textarea");
                 textArea.value = text;
-                document.body.appendChild(textArea);
+                if(index) {
+                    document.getElementById("Modal_share").appendChild(textArea);
+                } else {
+                    document.body.appendChild(textArea);
+                }
                 textArea.select();
 
                 try {
                     var successful = document.execCommand('copy');
                     var msg = successful ? 'successful' : 'unsuccessful';
-                    console.log('Copying text command was ' + msg);
+                    console.log('Copying text command was ' + msg + ' : ' + text);
                     alert("주소가 복사되었습니다.\n원하는 곳에 붙여넣기 해주세요.");
                 } catch (err) {
                     console.log('Oops, unable to copy');
                 }
-                document.body.removeChild(textArea);
+                if(index) {
+                    document.getElementById("Modal_share").removeChild(textArea);
+                } else {
+                    document.body.removeChild(textArea);
+                }
             }
 
-            function copyLink() {
-                copyTextToClipboard(location.href);
+            function copyLink(index) {
+                console.log(location.href);
+                copyTextToClipboard(location.href, index);
             }
 
             if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
@@ -281,7 +294,7 @@
                                 console.log('result : ', result);
                                 if(!result.error) {
                                     // alert(result.msg);
-                                    event.target.innerHTML = "Good Job " + result.data.good_job;
+                                    $('#goodJobBtn').html("Good Job " + result.data.good_job)
                                     $("#goodJobBtn")[0].className = 'left';
                                     $("#goodJobImg")[0].src = $("#goodJobImg")[0].src.replace('before', 'after');
                                 }
@@ -333,7 +346,7 @@
                                             '</h5>' +
                                         '</div>' +
                                         '<div class="thumbnail_area">' +
-                                            '<div class="thumbnail_'+ index + '" style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail +')"></div>' +
+                                            '<div class="thumbnail_'+ index + '" style="height: 100%; background-position: center; background-size: cover; background-image: url(./future/upload/' + contentsList[i-1].thumbnail +')"></div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</a>' +
@@ -362,6 +375,13 @@
                 }
             })
 
+            function modalOpen() {
+                console.log("Test-1")
+                document.getElementById('hiddenModalBtn').click();
+                setTimeout(function(){ document.getElementsByClassName('modal_menu_close')[0].click() } , 500);
+                setTimeout(function(){ document.body.className="modal-open" },1000);
+            }
+
 //            sendEmail();
         </script>
         <header class="detail_header">
@@ -389,7 +409,7 @@
                     <h5 class="date"></h5>
                     <div class="link_area">
                         <h3 class="subscription" data-toggle="modal" data-target="#Modal_subscription">구독하기</h3>
-                        <a href="#none"><img src="{% static 'img/share.svg' %}" alt="share icon" data-toggle="modal" data-target="#Modal_share"></a>
+                        <a><img src="{% static 'img/share.svg' %}" alt="share icon" data-toggle="modal" data-target="#Modal_share"></a>
                     </div>
                 </div>
             </div>
@@ -454,10 +474,11 @@
                                 </a>
                             </div>
                             <div class="menu_modal_right">
-                                <div class="subscription_btn" data-toggle="modal" data-target="#Modal_subscription">
+                                <div class="displaynone" data-toggle="modal" data-target="#Modal_subscription" id="hiddenModalBtn"></div>
+                                <div class="subscription_btn" onclick="modalOpen()">
                                     <h3>구독하기</h3>
                                 </div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close modal_menu_close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -517,7 +538,7 @@
                             <a onclick="fbShare()"><img src="{% static 'img/facebook.svg' %}"></a>
                             <a onclick="twitterShare()"><img src="{% static 'img/twitter.svg' %}"></a><br>
                             <a onclick="kakaoShare()"><img src="{% static 'img/kakao.svg' %}"></a>
-                            <a onclick="copyLink()"><img src="{% static 'img/link.svg' %}"></a>
+                            <a onclick="copyLink('modal')"><img src="{% static 'img/link.svg' %}"></a>
                         </div>
                         
                     </div>
@@ -525,32 +546,5 @@
                 </div>
             </div>
         </div>
-
-        <!-- Channel Plugin Scripts -->
-        <script>
-            window.channelPluginSettings = {
-                "pluginKey": "575f6f1d-27e6-4696-972c-5d4fd181a238"
-            };
-            (function() {
-                var node = document.createElement('div');
-                node.id = 'ch-plugin';
-                document.body.appendChild(node);
-                var async_load = function() {
-                    var s = document.createElement('script');
-                    s.type = 'text/javascript';
-                    s.async = true;
-                    s.src = '//cdn.channel.io/plugin/ch-plugin-web.js';
-                    s.charset = 'UTF-8';
-                    var x = document.getElementsByTagName('script')[0];
-                    x.parentNode.insertBefore(s, x);
-                };
-                if (window.attachEvent) {
-                    window.attachEvent('onload', async_load);
-                } else {
-                    window.addEventListener('load', async_load, false);
-                }
-            })();
-        </script>
-        <!-- End Channel Plugin -->
     </body>
 </html>

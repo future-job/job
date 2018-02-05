@@ -131,6 +131,12 @@
                 return str.split(searchStr).join(replaceStr);
             }
 
+            function activeScroll() {
+//                setTimeout(function(){document.getElementsByClassName('carousel-indicators')[0].scrollLeft = document.getElementsByClassName('active')[0].offsetLeft - document.getElementsByClassName('carousel-indicators')[0].offsetWidth/2}, 100);
+                setTimeout(function(){$('.carousel-indicators').animate({scrollLeft: (document.getElementsByClassName('active')[0].offsetLeft - document.getElementsByClassName('carousel-indicators')[0].offsetWidth/2)}, 200)}, 10);
+                //setTimeout(function(){document.getElementsByClassName('carousel-indicators')[0].scrollLeft = document.getElementsByClassName('active')[0].offsetLeft - document.getElementsByClassName('carousel-indicators')[0].offsetWidth/2}, 100);
+            }
+
             if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
                 $.get('/api/v1/server/status/', function (data, textStatus, request) {
                     console.log(requeset.getResponseHeader('csrftoken'))
@@ -159,7 +165,7 @@
                 for(var i=1; i<=contentsList.length; i++) {
                     var index = (i.toString().length == 1) ? "0"+i : i;
                     $("ul.carousel-indicators").append('' +
-                            '<li data-target="#carouselExampleIndicators" data-slide-to="'+ (i-1) + '"' + ((i == 1) ? ' class="active">' : '>') +
+                            '<li data-target="#carouselExampleIndicators" onclick="activeScroll()" data-slide-to="'+ (i-1) + '"' + ((i == 1) ? ' class="active">' : '>') +
                                 '<span class="num">' + index + '</span>' +
                             '</li>');
                     $("ul.modal-body-list").append(''+
@@ -173,14 +179,14 @@
                                             '</h5>' +
                                         '</div>' +
                                         '<div class="thumbnail_area">' +
-                                            '<div class="thumbnail_'+ index + '" style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail +')"></div>' +
+                                            '<div class="thumbnail_'+ index + '" style="height: 100%; background-position: center; background-size: cover; background-image: url(./future/upload/' + contentsList[i-1].thumbnail +')"></div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</a>' +
                             '</li>');
 
                     $("div.carousel-inner").append('' +
-                        '<div style="background-image: url(./future/upload/' + contentsList[i-1].thumbnail + ')" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
+                        '<div style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(./future/upload/' + contentsList[i-1].thumbnail + ') no-repeat center; background-size: cover;" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
                             '<div class="contents_common">' +
                                 '<a href="detail?list_no='+ i +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<h1>' + contentsList[i-1].title + '</h1>' +
@@ -193,7 +199,14 @@
                             '</div>' +
                         '</div>');
                 }
+                $("ul.carousel-indicators").append('' +
+                            '<li><span>&nbsp;</span></li>');
             })
+
+            function modalOpen() {
+                document.getElementsByClassName('modal_menu_close')[0].click();
+                document.body.className="modal-open";
+            }
 
         </script>
         <header>
@@ -215,10 +228,10 @@
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
                 <ul class="carousel-indicators"></ul>
                 <div class="carousel-inner"></div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" onclick="activeScroll()">
                     <img src="{% static 'img/left.svg' %}" alt="left">
                 </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" onclick="activeScroll()">
                     <img src="{% static 'img/right.svg' %}" alt="right">
                 </a>
             </div>
@@ -237,10 +250,10 @@
                                 </a>
                             </div>
                             <div class="menu_modal_right">
-                                <div class="subscription_btn" data-toggle="modal" data-target="#Modal_subscription">
+                                <div class="subscription_btn" onclick="modalOpen()" data-toggle="modal" data-target="#Modal_subscription">
                                     <h3>구독하기</h3>
                                 </div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close modal_menu_close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>

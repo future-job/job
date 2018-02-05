@@ -24,8 +24,8 @@ from future import settings
 
 
 urlpatterns = [
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'', include('ft_admin.urls')),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('api.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

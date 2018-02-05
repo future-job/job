@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Future Job</title>
+        <link rel="shortcut icon" type="image/png" href="http://future-job.net/static/img/symbol.png">
+
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <!-- bootstrap js -->
+        <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+        <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style_admin.css?v=2">
+
+        <script src="https://cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
+
+        <style>
+            .content_container {
+                margin : 30px 0;
+            }
+
+            .content_container .container_title {
+                margin-bottom: 15px;
+            }
+
+            .content_container textarea.summary_textarea {
+                height: 300px;
+                padding: 20px;
+            }
+
+            .content_container select,
+            .content_container input,
+            .content_container textarea {
+                -webkit-appearance: none;
+                border: 1px solid #1F2532;
+                -webkit-appearance: none;
+                border-radius: 4px;
+                background-color: #fff;
+                height: 60px;
+                padding: 0 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
+                $.get('/api/v1/server/status/', function (data, textStatus, request) {
+                    console.log(requeset.getResponseHeader('csrftoken'))
+                    var x_token = request.getResponseHeader('csrftoken');
+                    setCookie('csrftoken', x_token, 365);
+                });
+            }
+
+            function setCookie(cname, cvalue, exdays) {
+              var d = new Date();
+              d.setTime(d.getTime() + (exdays*24*60*60*1000));
+              var expires = "expires="+ d.toUTCString();
+              document.cookie = cname + "=" + encodeURI(cvalue) + ";" + expires + ";path=/";
+            }
+
+            function getCookie(c_name) {
+                if (document.cookie.length > 0){
+                    var c_start = document.cookie.indexOf(c_name + "=");
+                    var c_end = false;
+                    if (c_start != -1) {
+                        c_start = c_start + c_name.length + 1;
+                        c_end = document.cookie.indexOf(";", c_start);
+                        if (c_end == -1) c_end = document.cookie.length;
+                        return decodeURI(document.cookie.substring(c_start,c_end));
+                    }
+                }
+                return "";
+            }
+        </script>
+        <header style="border-bottom: 1px solid #e7e7e7; position: initial;">
+            <div class="container">
+                <div class="left">
+                    <img src="http://future-job.net/static/img/symbol.svg" alt="symbol" style="vertical-align: middle;">
+                </div>
+                <div class="left" style="font-weight: bold; margin-left: 1%;">FUTURE JOB</div>
+                <a href="/future/admin"><div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">포스트 관리</div></a>
+                <a href="/future/admin/member"><div class="left" style="font-weight: bold; margin-left: 10%; color: initial;">구독자 관리</div></a>
+                <a href="/"><div class="right" style="font-weight: bold; float: right; color: initial;">홈으로</div></a>
+            </div>
+        </header>
+        <div class="main_contianer" style="max-width: 1140px; margin: 50px auto;">
+            <h1 style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 20px; text-align: center;">포스트 수정</h1>
+            <div class="is_view_container">
+                <input type="checkbox" class="is_view" name="is_view"/>
+                <label for="is_view" style="">공개여부</label>
+            </div>
+            <div class="order_container content_container">
+                <h3 class="container_title">순위(필수)</h3>
+            </div>
+            <div class="category_container content_container">
+                <h3 class="container_title">카테고리(필수)</h3>
+                <select class="category_select" style="width: 100%">
+                    <option value="event">이벤트</option>
+                    <option value="noral">일반</option>
+                </select>
+            </div>
+            <div class="title_container content_container">
+                <h3 class="container_title">제목</h3>
+                <input class="title" type="text" style="width: 100%"/>
+            </div>
+            <div class="summary_container content_container">
+                <h3 class="container_title">요약글</h3>
+                <textarea class="summary_textarea" style="width: 100%"></textarea>
+            </div>
+            <div class="desc_container content_container">
+                <h3 class="container_title">내용</h3>
+                <textarea name="editor1"></textarea>
+            </div>
+            <div class="button_wrapper">
+            </div>
+        </div>
+        <script>
+            CKEDITOR.replace( 'editor1', {
+                filebrowserBrowseUrl: '/future/upload/browser/browse.php?type=Files',
+                filebrowserUploadUrl: '/future/upload/uploader/upload.php?type=Files'
+            });
+        </script>
+    </body>
+</html>

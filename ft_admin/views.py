@@ -19,13 +19,13 @@ def list_page(request):
     contents_list = []
 
     for i, value in enumerate(contents):
-        print len(ContentCategory.objects.filter(content_id=value.id))
+        # print len(ContentCategory.objects.filter(content_id=value.id))
         if len(ContentCategory.objects.filter(content_id=value.id)):
             category_id = ContentCategory.objects.get(content_id=value.id).category_id
             tag = Category.objects.get(id=category_id).name
         else:
             tag = ''
-        print ContentDetail.objects.get(content_id=value.id).summary_desc
+        # print ContentDetail.objects.get(content_id=value.id).summary_desc
         contents_list.append({
             'title': value.title,
             'index': i, 'id': value.id,
@@ -36,7 +36,7 @@ def list_page(request):
 
     result = dict()
     result['contents_list'] = contents_list
-    print contents_list
+    # print contents_list
 
     return render(request, 'blog/list.html', result)
 
@@ -49,8 +49,17 @@ def detail_page(request):
     meta_info['thumbnail'] = str(detail.image_01)
     meta_info['description'] = detail.summary_desc
     meta_info['goodjob'] = content.good_job
-    print "metaInfo : ", meta_info['description']
+    # print "metaInfo : ", meta_info['description']
     return render(request, 'blog/detail.html', meta_info)
 
-def cutom_admin(request):
+def custom_admin(request):
     return render(request, 'blog/admin.html')
+
+def custom_admin_detail(request):
+    # def dispatch(self, *args, **kwargs):
+    #     return super(BoardSearchView, self).dispatch(*args, **kwargs)
+    #
+    # contend_id = kwargs['contend_id']
+    # data = dict()
+    # data["content_id"] = contend_id
+    return render(request, 'blog/admin_detail.html')

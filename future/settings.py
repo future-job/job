@@ -40,7 +40,7 @@ DEBUG = True
 
 CSRF_WHITELIST = []                     #   with nginx CORS WHITE LIST, default csrf whitelist
 CSRF_WHITELIST += ['127.0.0.1:8888', 'localhost:8800']
-CSRF_WHITELIST += ['127.0.0.1:8080', 'localhost:8080']
+CSRF_WHITELIST += ['13.125.30.175', 'future-job.net']
 
 ALLOWED_HOSTS_FOR_MYDANO = []
 
@@ -60,8 +60,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'ckeditor',
     'ckeditor_uploader',
+    'ckeditor',
     'adminsortable',
     'djcelery',
 
@@ -75,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -196,10 +196,10 @@ ADMIN_TOOLS_APP_INDEX_DASHBOARD = 'danoshop.dashboard.CustomAppIndexDashboard'
 #   CK Editor
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 
-def get_filename(filename):
-    return filename.upper()
-
-CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+# def get_filename(filename):
+#     return filename.upper()
+#
+# CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
 #CKEDITOR_UPLOAD_PATH = "/mnt/nas/shop/"
 # CKEDITOR_UPLOAD_PATH = ''
 CKEDITOR_UPLOAD_PATH = "upload/"
