@@ -5,6 +5,9 @@ from __future__ import unicode_literals
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Content, ContentDetail, ContentCategory
 import re
+from . import forms
+from ckeditor_uploader.fields import RichTextUploadingField
+
 # Create your views here.
 
 def main_page(request):
@@ -56,10 +59,4 @@ def custom_admin(request):
     return render(request, 'blog/admin.html')
 
 def custom_admin_detail(request):
-    # def dispatch(self, *args, **kwargs):
-    #     return super(BoardSearchView, self).dispatch(*args, **kwargs)
-    #
-    # contend_id = kwargs['contend_id']
-    # data = dict()
-    # data["content_id"] = contend_id
     return render(request, 'blog/admin_detail.html')
