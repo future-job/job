@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url, include
-# from views import ServerStatusView, ContentListView, ContentDetailView, SubscriptionRegisterView
-from views import ContentListView, ContentDetailView, MemberJoinView, ServerStatusView, ContentLikeView, SendEmailView, AdminContentListView
+from views import ContentListView, ContentDetailView, MemberJoinView, ServerStatusView, ContentLikeView, SendEmailView, AdminContentListView, AdminContentDetailView
 
 # from rest_framework import routers
 
@@ -42,7 +41,7 @@ urlpatterns = [
 
     #   Admin
     url(r'^v1/admin/content/list/$', AdminContentListView.as_view(), name="main_product_view"),
-
+    url(r'^v1/admin/content/detail/post/$', AdminContentDetailView.as_view(), name="main_product_view"),
 
 
     #   Member

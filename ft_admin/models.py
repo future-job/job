@@ -34,7 +34,7 @@ class ContentCategory(SortableMixin):
         verbose_name_plural = u'콘텐츠 카테고리'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        print 'Content save...'
+        print 'ContentCategory save...'
         super(ContentCategory, self).save(force_insert, force_update, using, update_fields)
 
     def __unicode__(self):
@@ -60,7 +60,7 @@ class Category(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        print 'save category...'
+        print 'Category save ...'
         return super(Category, self).save(force_insert, force_update, using, update_fields)
 
     def __unicode__(self):
@@ -94,11 +94,15 @@ class Content(models.Model):
 
         super(Content, self).clean()
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        print 'Content save...'
+    def save(self, *args, **kwargs):
+        print "Content save ..."
+        super(Content, self).save(*args, **kwargs)
 
-        super(Content, self).save(force_insert, force_update, using, update_fields)
+    # def save(self, force_insert=False, force_update=False, using=None,
+    #          update_fields=None):
+    #     print 'Content save...'
+    #
+    #     super(Content, self).save(force_insert, force_update, using, update_fields)
 
 class ContentDetail(models.Model):
 
@@ -120,17 +124,19 @@ class ContentDetail(models.Model):
         verbose_name = u'컨텐츠 상세 설명'
         verbose_name_plural = u'컨텐츠 상세 설명'
 
-    # def save(self, *args, **kwargs):
-    #     super(Member, self).save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        print "ContentDetail save ..."
+        super(ContentDetail, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.summary_desc
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        print 'Content save...'
-
-        super(ContentDetail, self).save(force_insert, force_update, using, update_fields)
+    # def save(self, force_insert=False, force_update=False, using=None,
+    #          update_fields=None):
+    #     print 'ContentDetail save...'
+    #
+    #     super(ContentDetail, self).save(force_insert, force_update, using, update_fields)
 
 
 class Member(models.Model):

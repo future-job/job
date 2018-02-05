@@ -11,14 +11,15 @@
 
         <!-- bootstrap css -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
-        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
         <!-- bootstrap js -->
         <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style_admin.css' %}">
 
         <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
         <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
@@ -38,7 +39,7 @@
                                 '<td style="color: #1F2532;">' + 0 + '</td>' +
                                 '<td style="color: #1F2532;">' + contentsList[i].good_job + '</td>' +
                                 '<td style="color: #1F2532;">' +
-                                    '<a href="/future/admin/detail?content_id=' + contentsList[i].id + '"><span style="color: #FB005D; margin: 0 5px;">수정</span></a>' +
+                                    '<a href="/future/admin/detail?new=false&content_id=' + contentsList[i].id + '"><span style="color: #FB005D; margin: 0 5px;">수정</span></a>' +
                                     '<span style="color: #FB005D; margin: 0 5px;">메일발송</span>' +
                                     '<span style="color: #FB005D; margin: 0 5px;">삭제</span>' +
                                 '</td>' +
@@ -58,6 +59,9 @@
             </div>
         </header>
         <div class="main_contianer" style="margin: 50px auto;">
+            <div style="width: 1140px;margin: auto;">
+                <a href="/future/admin/detail?new=true"><div class="btn write">글쓰기</div></a>
+            </div>
             <h1 style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 20px">포스트 목록</h1>
             <table id="contentTable" style="width: 100%; max-width: 1140px; margin: 30px auto 0; text-align: center; font-size: 14px;">
                 <colgroup>

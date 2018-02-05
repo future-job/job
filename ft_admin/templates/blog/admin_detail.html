@@ -1,3 +1,5 @@
+{% load i18n static %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,10 +9,6 @@
         <title>Future Job</title>
         <link rel="shortcut icon" type="image/png" href="http://future-job.net/static/img/symbol.png">
 
-        <!-- bootstrap css -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
-        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
         <!-- bootstrap js -->
@@ -18,37 +16,23 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
         <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
-        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style_admin.css?v=2">
 
-        <script src="https://cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style_admin.css' %}">
 
-        <style>
-            .content_container {
-                margin : 30px 0;
-            }
+        <!-- http://eonasdan.github.io/bootstrap-datetimepicker/ -->
+        <script src="{% static 'picker/moment.min.js' %}"></script>
+        <script src="{% static 'picker/bootstrap-datetimepicker.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'picker/bootstrap-datetimepicker.css' %}">
 
-            .content_container .container_title {
-                margin-bottom: 15px;
-            }
+        <!-- include summernote css/js -->
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
 
-            .content_container textarea.summary_textarea {
-                height: 300px;
-                padding: 20px;
-            }
-
-            .content_container select,
-            .content_container input,
-            .content_container textarea {
-                -webkit-appearance: none;
-                border: 1px solid #1F2532;
-                -webkit-appearance: none;
-                border-radius: 4px;
-                background-color: #fff;
-                height: 60px;
-                padding: 0 20px;
-            }
-        </style>
     </head>
     <body>
         <script>
@@ -80,6 +64,120 @@
                 }
                 return "";
             }
+
+            var getParameterByName = function (name, url) {
+                  if (!url) url = window.location.href;
+                  name = name.replace(/[\[\]]/g, "\\$&");
+                  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                      results = regex.exec(url);
+                  if (!results) return null;
+                  if (!results[2]) return '';
+                  return decodeURIComponent(results[2]);
+            }
+
+            function submitPost() {
+
+//                if(!(regexObj.email).test($('input.user_email')[0].value)) {
+//                    alert('올바른 이메일 형식이 아닙니다');
+//                    return;
+//                } else if(!(regexObj.age).test($('input.user_age')[0].value)) {
+//                    alert('나이는 숫자만 입력 가능합니다');
+//                    return;
+//                } else if(!(regexObj.job).test($('input.user_job')[0].value)) {
+//                    alert('직업은 한글/영문만 입력 가능합니다');
+//                    return;
+//                }
+
+                var postData = new FormData();
+                postData.append( 'content_no', getParameterByName('content_id'));
+                postData.append( 'is_view', $('.is_view')[0].checked ? 1 : 0);
+                postData.append( 'category', $('.category_select')[0].value);
+                postData.append( 'title', $('.title')[0].value);
+                postData.append( 'summary_desc', $('.summary_textarea')[0].value.replace(/\n/g, '<br/>'));
+                postData.append( 'thumbnail', $('#thumbnail')[0].files[0]||'');
+                postData.append( 'detail_desc', $('.note-editable')[0].innerHTML);
+                postData.append( 'reg_time', $("#datetimepicker").data('date').split(' ')[0].split('/')[2]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[1]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[0]+' '+$("#datetimepicker").data('date').split(' ')[1]+':00+09:00');
+                postData.append( 'new_post', getParameterByName('new') == 'true' ? 1 : 0);
+
+
+                if(window.location.host.indexOf('127.0.0.1') != -1) {
+                    $.ajax({
+                        url: '/api/v1/admin/content/detail/post/',
+                        type: getParameterByName('new') == 'true' ? 'post' : 'put',
+                        data: postData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert(result.msg);
+                                location.href = '/future/admin/';
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                } else {
+                    $.ajax({
+                        url: '/api/v1/admin/content/detail/post/',
+                        type: getParameterByName('new') == 'true' ? 'post' : 'put',
+                        data: postData,
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert(result.msg);
+                                location.href = '/future/admin/';
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                }
+            }
+
+            function getPost(flag) {
+                if(flag) {
+                    $.get('/api/v1/admin/content/detail/post/', function (data) {
+                        console.log(data);
+                        var response = data.data
+                        for (var i = 0; i < response.category_list.length; i++) {
+                            $('.category_select').append('<option value="' + response.category_list[i].id + '">' + response.category_list[i].name + '</option>')
+                        }
+                    })
+                } else {
+                    $.get('/api/v1/admin/content/detail/post/?content_no=' + getParameterByName('content_id'), function (data) {
+                        console.log(data);
+                        var response = data.data
+                        for (var i = 0; i < response.category_list.length; i++) {
+                            $('.category_select').append('<option value="' + response.category_list[i].id + '">' + response.category_list[i].name + '</option>')
+                        }
+
+                        $('.is_view')[0].checked = response.is_view;
+                        $('.category_select')[0].value = response.category;
+                        $('.title')[0].value = response.title;
+                        $('.summary_textarea')[0].value = response.summary_desc.replace(/<br\/>/g, '\n');
+                        $('.note-editable')[0].innerHTML = response.detail_desc;
+                        $('.thumbnail_container').append('<div>' + '기존 썸네일' + '</div>');
+                        $('.thumbnail_container').append('<div style="height: 300px; width: 100%; background-repeat: no-repeat; background-size: contain; background-position: left, center; background-image: url(/future/upload/' + response.thumbnail + ')"></div>');
+                    })
+                }
+            }
+
+            $(document).ready(function() {
+                if(getParameterByName('new') == 'true') {
+                    document.getElementById('postTitle').innerHTML = '포스트 작성';
+                    document.getElementsByClassName('register')[0].innerHTML = '등록하기';
+                    getPost(true);
+                } else {
+                    getPost(false);
+                    document.getElementsByClassName('register')[0].innerHTML = '수정하기';
+               }
+            })
         </script>
         <header style="border-bottom: 1px solid #e7e7e7; position: initial;">
             <div class="container">
@@ -93,20 +191,24 @@
             </div>
         </header>
         <div class="main_contianer" style="max-width: 1140px; margin: 50px auto;">
-            <h1 style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 20px; text-align: center;">포스트 수정</h1>
+            <h1 id="postTitle" style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 20px; text-align: center;">포스트 수정</h1>
             <div class="is_view_container">
                 <input type="checkbox" class="is_view" name="is_view"/>
                 <label for="is_view" style="">공개여부</label>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="datetimepicker"></div>
+                    </div>
+                </div>
             </div>
             <div class="order_container content_container">
                 <h3 class="container_title">순위(필수)</h3>
             </div>
             <div class="category_container content_container">
                 <h3 class="container_title">카테고리(필수)</h3>
-                <select class="category_select" style="width: 100%">
-                    <option value="event">이벤트</option>
-                    <option value="noral">일반</option>
-                </select>
+                <select class="category_select" style="width: 100%"></select>
             </div>
             <div class="title_container content_container">
                 <h3 class="container_title">제목</h3>
@@ -116,17 +218,38 @@
                 <h3 class="container_title">요약글</h3>
                 <textarea class="summary_textarea" style="width: 100%"></textarea>
             </div>
+            <div class="thumbnail_container content_container">
+                <h3 class="container_title">썸네일 이미지</h3>
+                <label class="displaynone" htmlFor='thumbnail'>썸네일 등록</label>
+                <input id="thumbnail" type="file" accept="image/*" name="thumbnail" />
+            </div>
             <div class="desc_container content_container">
                 <h3 class="container_title">내용</h3>
-                <textarea name="editor1"></textarea>
+                <textarea id="summernote" name="editordata"></textarea>
+                <!--textarea name="editor1"></textarea-->
+
             </div>
             <div class="button_wrapper">
+                <div class="register btn" onclick="submitPost()"></div>
             </div>
         </div>
         <script>
-            CKEDITOR.replace( 'editor1', {
-                filebrowserBrowseUrl: '/future/upload/browser/browse.php?type=Files',
-                filebrowserUploadUrl: '/future/upload/uploader/upload.php?type=Files'
+
+            $(document).ready(function() {
+                $(function () {
+                    $('#datetimepicker').datetimepicker({
+                        inline: true,
+                        sideBySide: true
+                    });
+                });
+
+                $('#summernote').summernote({
+                    minHeight: 700,             // set minimum height of editor
+                    maxHeight: null,             // set maximum height of editor
+                    focus: true                  // set focus to editable area after initializin
+                });
+
+                console.log($("#datetimepicker").data("datetimepicker"));
             });
         </script>
     </body>
