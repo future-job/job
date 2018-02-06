@@ -185,8 +185,9 @@
                                 '</a>' +
                             '</li>');
 
+                    var availHeight = window.screen.availHeight + 'px';
                     $("div.carousel-inner").append('' +
-                        '<div style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(./future/upload/' + contentsList[i-1].thumbnail + ') no-repeat center; background-size: cover;" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
+                        '<div style="height:'+ availHeight + '; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(./future/upload/' + contentsList[i-1].thumbnail + ') no-repeat center; background-size: cover;" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
                             '<div class="contents_common">' +
                                 '<a href="detail?list_no='+ i +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<h1>' + contentsList[i-1].title + '</h1>' +
@@ -195,7 +196,7 @@
                                 '</a>' +
                             '</div>' +
                             '<div class="more">' +
-                                '<a href="detail?list_no='+ i + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src=""></a>' +
+                                '<a href="detail?list_no='+ i + '&content_no=' + contentsList[i-1].id +'">더보기<br><img src="{% static 'img/more.svg' %}"></a>' +
                             '</div>' +
                         '</div>');
                 }
