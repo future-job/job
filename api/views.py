@@ -414,6 +414,9 @@ class AdminContentDetailView(View):
 class ContentDetailView(View):
     def get(self, request, **kwargs):
         result = dict()
+        contents_list = []
+
+        contents = Content.objects.filter(is_view=True).order_by('-id')
         content_id = int(request.GET.get('content_no', -1))
         detail = ContentDetail.objects.get(content_id=content_id)
 
@@ -423,8 +426,19 @@ class ContentDetailView(View):
         else:
             tag_name = ''
 
-
-        print content_id
+        for i, value in enumerate(contents):
+            if len(ContentCategory.objects.filter(content_id=value.id)):
+                category_id = ContentCategory.objects.get(content_id=value.id).category_id
+                tag = Category.objects.get(id=category_id).name
+            else:
+                tag = ''
+            contents_list.append({
+                'title': value.title,
+                'index': i, 'id': value.id,
+                'summary_desc': ContentDetail.objects.get(content_id=value.id).summary_desc.replace('\n', '<br/>'),
+                'thumbnail': str(ContentDetail.objects.get(content_id=value.id).image_01),
+                'tag': tag
+            })
 
         if content_id == -1:
             result['error'] = 601
@@ -449,6 +463,7 @@ class ContentDetailView(View):
                 data['detail_desc'] = detail.detail_desc
                 data['thumbnail'] = str(detail.image_01)
                 data['tag'] = tag_name
+                data['contents'] = contents_list
                 result['error'] = 0
                 result['data'] = data
 

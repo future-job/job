@@ -195,6 +195,10 @@
                         resize();
                     });
 
+//                    setTimeout(function() {
+//                        $('.carousel-item').css('height', window.innerHeight + 'px');
+//                    }, 1000)
+
                     var resize = function() {
                         if(window.innerHeight != tempHeight) {
                             tempHeight = window.innerHeight;
@@ -225,6 +229,10 @@
                 document.getElementsByClassName('modal_menu_close')[0].click();
                 document.body.className="modal-open";
             }
+
+            $(document).ready(function() {
+                $('.carousel-item').css('height', window.innerHeight + 'px');
+            })
 
         </script>
         <header>
