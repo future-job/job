@@ -185,9 +185,26 @@
                                 '</a>' +
                             '</li>');
 
+                    var tempHeight = window.innerHeight;
+                    var a = setInterval(function() {
+                        $(window).scrollTop(-1);
+                        resize();
+                    }, 500); // Don't lower more than 500ms, otherwise there will be animation-problems with the  Safari toolbar
+
+                    $(window).on('resize', function() {
+                        resize();
+                    });
+
+                    var resize = function() {
+                        if(window.innerHeight != tempHeight) {
+                            tempHeight = window.innerHeight;
+                            $('.carousel-item').css('height', tempHeight + 'px');
+                        }
+                    };
+
                     var availHeight = window.screen.availHeight + 'px';
                     $("div.carousel-inner").append('' +
-                        '<div style="height:'+ availHeight + '; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(./future/upload/' + contentsList[i-1].thumbnail + ') no-repeat center; background-size: cover;" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
+                        '<div style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(./future/upload/' + contentsList[i-1].thumbnail + ') no-repeat center; background-size: cover;" class="carousel-item carousel-item-'+ index + ((i==1) ? ' active">' : '">') +
                             '<div class="contents_common">' +
                                 '<a href="detail?list_no='+ i +'&content_no=' + contentsList[i-1].id + '">' +
                                     '<h1>' + contentsList[i-1].title + '</h1>' +
