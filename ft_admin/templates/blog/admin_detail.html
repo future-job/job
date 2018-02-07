@@ -36,6 +36,8 @@
     </head>
     <body>
         <script>
+            var originOrder = "";
+
             if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
                 $.get('/api/v1/server/status/', function (data, textStatus, request) {
                     console.log(requeset.getResponseHeader('csrftoken'))
@@ -98,6 +100,8 @@
                 postData.append( 'detail_desc', $('.note-editable')[0].innerHTML);
                 postData.append( 'reg_time', $("#datetimepicker").data('date').split(' ')[0].split('/')[2]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[1]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[0]+' '+$("#datetimepicker").data('date').split(' ')[1]+':00+09:00');
                 postData.append( 'new_post', getParameterByName('new') == 'true' ? 1 : 0);
+                postData.append( 'order', $('.order_select').val());
+                postData.append( 'origin_order', originOrder);
 
 
                 if(window.location.host.indexOf('127.0.0.1') != -1) {
@@ -144,7 +148,12 @@
                 if(flag) {
                     $.get('/api/v1/admin/content/detail/post/', function (data) {
                         console.log(data);
-                        var response = data.data
+                        var response = data.data;
+                        for (var i = 0; i < response.contents_list.length; i++) {
+                            if(!i) $('.order_select').append('<option value="1">' + '맨 처음으로 등록' + '</option>')
+                            $('.order_select').append('<option value="' + (Number(response.contents_list[i].display_order)+1) + '">"' + response.contents_list[i].display_order + '. ' + response.contents_list[i].title + '" 의 다음으로 등록' + '</option>')
+
+                        }
                         for (var i = 0; i < response.category_list.length; i++) {
                             $('.category_select').append('<option value="' + response.category_list[i].id + '">' + response.category_list[i].name + '</option>')
                         }
@@ -153,6 +162,12 @@
                     $.get('/api/v1/admin/content/detail/post/?content_no=' + getParameterByName('content_id'), function (data) {
                         console.log(data);
                         var response = data.data
+                        originOrder = response.display_order;
+                        for (var i = 0; i < response.contents_list.length; i++) {
+                            if(!i) $('.order_select').append('<option value="1">' + '맨 처음으로 등록' + '</option>')
+                            $('.order_select').append('<option value="' + (Number(response.contents_list[i].display_order)+1) + '">"' + response.contents_list[i].display_order + '. ' + response.contents_list[i].title + '" 의 다음으로 등록' + '</option>')
+
+                        }
                         for (var i = 0; i < response.category_list.length; i++) {
                             $('.category_select').append('<option value="' + response.category_list[i].id + '">' + response.category_list[i].name + '</option>')
                         }
@@ -205,6 +220,7 @@
             </div>
             <div class="order_container content_container">
                 <h3 class="container_title">순위(필수)</h3>
+                <select class="order_select" style="width: 100%"></select>
             </div>
             <div class="category_container content_container">
                 <h3 class="container_title">카테고리(필수)</h3>

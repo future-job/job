@@ -136,10 +136,45 @@ class ContentListView(View):
         return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
 
 class AdminContentListView(View):
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.method == 'PUT':
+            if hasattr(request, '_post'):
+                del request._post
+                del request._files
+            try:
+                request.method = "POST"
+                request._load_post_and_files()
+                request.method = "PUT"
+            except AttributeError:
+                print 'Attribute Error..???'
+                request.META['REQUEST_METHOD'] = 'POST'
+                request._load_post_and_files()
+                request.META['REQUEST_METHOD'] = 'PUT'
+
+            request.PUT = request.POST
+
+        elif request.method == 'DELETE':
+            if hasattr(request, '_post'):
+                del request._post
+                del request._files
+            try:
+                request.method = "POST"
+                request._load_post_and_files()
+                request.method = "DELETE"
+            except AttributeError:
+                request.META['REQUEST_METHOD'] = 'POST'
+                request._load_post_and_files()
+                request.META['REQUEST_METHOD'] = 'DELETE'
+
+            request.DELETE = request.POST
+
+        return super(AdminContentListView, self).dispatch(request, *args, **kwargs)
+
     def get(self, request, **kwargs):
         result = dict()
 
-        contents = Content.objects.all().order_by('-id')
+        contents = Content.objects.all().order_by('display_order')
         contents_list = []
 
         for i, value in enumerate(contents):
@@ -155,7 +190,9 @@ class AdminContentListView(View):
                 'id': value.id,
                 'tag': tag,
                 'good_job': value.good_job,
-
+                'hit_count': value.hit_count,
+                'is_view': value.is_view,
+                'display_order': value.display_order
             })
         print ('contents_list : %s', contents_list)
 
@@ -165,6 +202,44 @@ class AdminContentListView(View):
         result['error'] = 0
 
         return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
+
+    def delete(self, request, **kwargs):
+
+        # result = dict(error=0, msg="", data=dict())
+        content_id = request.GET.get('content_id', -1)
+        content = Content.objects.filter(id=content_id)
+        print Content.objects.all().values_list()
+
+        print "Delete : ", content_id, content
+
+        if content.exists() is False:
+            result = dict(error=600, msg="content_id에 해당하는 글이 없습니다.", data=dict())
+            return HttpResponse(json.dumps(result, ensure_ascii=False))
+
+        else :
+
+            try:
+
+                print Content.objects.filter(id=content_id).values('display_order')[0]["display_order"]
+                order = int(Content.objects.filter(id=content_id).values('display_order')[0]["display_order"])
+
+                contents_query = Content.objects.all()
+                query_order = contents_query.values('display_order', 'id')
+
+                for i, value in enumerate(query_order):
+                    print value, i
+                    if (int(value['display_order']) >= order):
+                        print "Update"
+                        Content.objects.filter(id=value['id']).update(display_order=(int(value['display_order']) - 1))
+
+                Content.objects.get(id=content_id).delete()
+            except:
+                result = dict(error=600, msg="삭제에 실패 했습니다", data=dict())
+                return HttpResponse(json.dumps(result, ensure_ascii=False))
+
+            result = dict(error=0, msg=u"포스트가 성공적으로 삭제되었습니다", data=dict())
+            return HttpResponse(json.dumps(result, ensure_ascii=False))
+
 
 class AdminContentDetailView(View):
     def dispatch(self, request, *args, **kwargs):
@@ -203,8 +278,6 @@ class AdminContentDetailView(View):
         return super(AdminContentDetailView, self).dispatch(request, *args, **kwargs)
 
 
-        # return super(AdminContentDetailView, self).dispatch(*args, **kwargs)
-
     def get(self, request, **kwargs):
         result = dict()
         category_list = []
@@ -217,6 +290,27 @@ class AdminContentDetailView(View):
             category_list.append({
                 'id' : value['id'],
                 'name' : value['name'],
+            })
+
+        contents = Content.objects.all().order_by('display_order')
+        contents_list = []
+
+        for i, value in enumerate(contents):
+            # print len(ContentCategory.objects.filter(content_id=value.id))
+            # if len(ContentCategory.objects.filter(content_id=value.id)):
+            #     category_id = ContentCategory.objects.get(content_id=value.id).category_id
+                # tag = Category.objects.get(id=category_id).name
+            # else:
+                # tag = ''
+            contents_list.append({
+                'title': value.title,
+                'index': i,
+                # 'id': value.id,
+                # 'tag': tag,
+                # 'good_job': value.good_job,
+                # 'hit_count': value.hit_count,
+                # 'is_view': value.is_view,
+                'display_order': value.display_order,
             })
 
         content_id = int(request.GET.get('content_no', -1))
@@ -247,11 +341,14 @@ class AdminContentDetailView(View):
                     data['is_view'] = content.is_view
                     data['category'] = category_value
                     data['category_list'] = category_list
+                    data['contents_list'] = contents_list
+                    data['display_order'] = content.display_order
                     result['error'] = 0
                     result['data'] = data
         else :
             data = dict()
             data['category_list'] = category_list
+            data['contents_list'] = contents_list
             result['error'] = 0
             result['data'] = data
 
@@ -304,6 +401,18 @@ class AdminContentDetailView(View):
 
         detail.detail_desc = detail_desc
 
+        order = int(request.POST.get('order', 0))
+        content.display_order = order
+
+        contents_query = Content.objects.all()
+        query_order = contents_query.values('display_order', 'id')
+        print "Want : ", order
+
+        for i, value in enumerate(query_order):
+            print value, i
+            if (int(value['display_order']) >= order):
+                print "Update"
+                Content.objects.filter(id=value['id']).update(display_order=(int(value['display_order']) + 1))
 
         if int(len(request.FILES.keys())) == 0:
             result = dict(error=601, msg=u"썸네일은 필수 입력값 입니다.", data=dict())
@@ -341,7 +450,6 @@ class AdminContentDetailView(View):
 
         content = Content.objects.get(id=content_id)
         detail = ContentDetail.objects.get(content_id=content_id)
-        content_category = ContentCategory.objects.get(content_id=content_id)
 
         is_view = request.POST.get('is_view', 0)
         print is_view
@@ -384,11 +492,33 @@ class AdminContentDetailView(View):
 
         detail.detail_desc = detail_desc
 
-        print request.FILES.keys() ,len(request.FILES.keys()), int(len(request.FILES.keys()))
+        order = int(request.POST.get('order', 0))
+        content.display_order = order
+
+        contents_query = Content.objects.all()
+        query_order = contents_query.values('display_order', 'id')
+        origin_order = int(request.POST.get('origin_order', 1))
+        print "Origin : ", origin_order
+        print "Want : ", order
+
+        for i, value in enumerate(query_order):
+            if order > origin_order :
+                print value, i
+                if (int(value['display_order']) > origin_order and int(value['display_order']) <= order) :
+                    print "Update"
+                    Content.objects.filter(id=value['id']).update(display_order=(int(value['display_order']) - 1))
+
+            elif order < origin_order :
+                print value, i
+                if (int(value['display_order']) < origin_order and int(value['display_order']) >= order) :
+                    print "Update"
+                    Content.objects.filter(id=value['id']).update(display_order=(int(value['display_order']) + 1))
+
+        # print request.FILES.keys() ,len(request.FILES.keys()), int(len(request.FILES.keys()))
         if len(request.FILES.keys()) is not 0:
             upload_f = request.FILES['thumbnail']
             file_name = "%s_%s.%s" % ('thumbnail', str(time.time()).replace('.', ''), str(upload_f).split('.')[-1])
-            print file_name, upload_f
+            # print file_name, upload_f
             try:
                 url = save_board_file(file_name, upload_f)
                 print "save_board_file : ", url
@@ -401,8 +531,11 @@ class AdminContentDetailView(View):
             content.save()
             # detail.content = content
             detail.save()
-            content_category.category_id = category_no
-            content_category.save()
+            selected_content = ContentCategory.objects.filter(content=content)
+            print content, ContentCategory.objects.filter(content=content).values('category')
+            selected_content.update(category=category_no)
+            print content, ContentCategory.objects.filter(content=content).values('category')
+
         except:
             result = dict(error=600, msg=u"개발팀에 문의해주세요", data=dict())
             return HttpResponse(json.dumps(result, ensure_ascii=False))
@@ -446,6 +579,13 @@ class ContentDetailView(View):
             # result['msg'] = self.get_error_msg(result['error'])
         else:
             content = Content.objects.get(id=content_id)
+
+            content_view = Content.objects
+            hit_count = content_view.filter(id=content_id).values('hit_count')
+            if hit_count.exists():
+                hit_count = hit_count[0]['hit_count']
+                content_view.filter(id=content_id).update(hit_count=hit_count + 1)
+
             # print content_info
             # print content.title, content.id, content.is_view, content.reg_time
 

@@ -314,9 +314,9 @@
                                 console.log('result : ', result);
                                 if(!result.error) {
                                     // alert(result.msg);
-                                    $('#goodJobBtn').html("Good Job " + result.data.good_job)
                                     $("#goodJobBtn")[0].className = 'left';
                                     $("#goodJobImg")[0].src = $("#goodJobImg")[0].src.replace('before', 'after');
+                                    $('#goodJobBtn').html("Good Job " + result.data.good_job)
                                 }
                             }
                         })
@@ -326,7 +326,7 @@
                             console.log('result : ', result);
                             if(!result.error) {
                                 // alert(result.msg);
-                                event.target.innerHTML = "Good Job " + result.data.good_job;
+                                $('#goodJobBtn').html("Good Job " + result.data.good_job)
                                 $("#goodJobBtn")[0].className = 'left';
                                 $("#goodJobImg")[0].src = $("#goodJobImg")[0].src.replace('before', 'after');
                             }

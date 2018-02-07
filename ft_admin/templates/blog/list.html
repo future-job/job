@@ -132,9 +132,7 @@
             }
 
             function activeScroll() {
-//                setTimeout(function(){document.getElementsByClassName('carousel-indicators')[0].scrollLeft = document.getElementsByClassName('active')[0].offsetLeft - document.getElementsByClassName('carousel-indicators')[0].offsetWidth/2}, 100);
                 setTimeout(function(){$('.carousel-indicators').animate({scrollLeft: (document.getElementsByClassName('active')[0].offsetLeft - document.getElementsByClassName('carousel-indicators')[0].offsetWidth/2)}, 200)}, 10);
-                //setTimeout(function(){document.getElementsByClassName('carousel-indicators')[0].scrollLeft = document.getElementsByClassName('active')[0].offsetLeft - document.getElementsByClassName('carousel-indicators')[0].offsetWidth/2}, 100);
             }
 
             if(((window.location.host == '127.0.0.1') || (window.location.host == 'localhost')) && !getCookie('csrftoken')) {
@@ -159,9 +157,12 @@
                 }
             });
 
-            $(document).ready(function() {
-                var contentsList = JSON.parse("{{contents_list}}".replace(/u&#39;/g, '"').replace(/&#39;/g, '"').replace(/u&quot;/g, '"').replace(/&quot;/g, '"'));
-                console.log(contentsList)
+            $.get('/api/v1/content/list', function(data) {
+                console.log("GET: ", data)
+
+//            $(document).ready(function() {
+//                var contentsList = JSON.parse("{{contents_list}}".replace(/u&#39;/g, '"').replace(/&#39;/g, '"').replace(/u&quot;/g, '"').replace(/&quot;/g, '"'));
+                var contentsList = data.contents;
                 for(var i=1; i<=contentsList.length; i++) {
                     var index = (i.toString().length == 1) ? "0"+i : i;
                     $("ul.carousel-indicators").append('' +

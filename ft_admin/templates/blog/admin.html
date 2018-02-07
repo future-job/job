@@ -26,25 +26,70 @@
     </head>
     <body>
         <script>
-            $.get('/api/v1/admin/content/list/',function(data) {
-                var contentsList = data.contents;
-                console.log(contentsList);
+            function deleteContent(id) {
+                if(window.location.host.indexOf('127.0.0.1') != -1) {
+                    $.ajax({
+                        url: '/api/v1/admin/content/list/?content_id='+id,
+                        type: 'delete',
+                        processData: false,
+                        contentType: false,
+//                        headers: {
+//                            'X-CSRFToken': getCookie('csrftoken')
+//                        },
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert(result.msg);
+                                location.reload();
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                } else {
+                    $.ajax({
+                        url: '/api/v1/admin/content/list/?content_id='+id,
+                        type: 'delete',
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert(result.msg);
+                                location.reload();
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                }
+            }
 
-                for(var i=contentsList.length-1; i >= 0; i--) {
-                    $("table#contentTable").append('' +
-                            '<tr style="border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;">' +
-                                '<td style="color: #1F2532;">' + (contentsList[i].index+1) + '</td>' +
+            function getContentList() {
+                $.get('/api/v1/admin/content/list/', function (data) {
+                    var contentsList = data.contents;
+                    console.log(contentsList);
+                    for (var i = contentsList.length - 1; i >= 0; i--) {
+                        $("table#contentTable").append('' +
+                                '<tr style="border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;" id="content' + contentsList[i].id + '">' +
+                                '<td style="color: #1F2532;">' + (contentsList[i].index + 1) + '</td>' +
                                 '<td style="color: #1F2532;">' + (contentsList[i].tag && contentsList[i].tag != '일반' ? contentsList[i].tag : '-') + '</td>' +
                                 '<td style="text-align: left; color: #1F2532;">' + contentsList[i].title + '</td>' +
-                                '<td style="color: #1F2532;">' + 0 + '</td>' +
+                                '<td style="color: #1F2532;">' + contentsList[i].hit_count + '</td>' +
                                 '<td style="color: #1F2532;">' + contentsList[i].good_job + '</td>' +
+                                '<td style="color: #1F2532;">' + (contentsList[i].is_view == true ? 'O' : 'X') + '</td>' +
                                 '<td style="color: #1F2532;">' +
-                                    '<a href="/future/admin/detail?new=false&content_id=' + contentsList[i].id + '"><span style="color: #FB005D; margin: 0 5px;">수정</span></a>' +
-                                    '<span style="color: #FB005D; margin: 0 5px;">메일발송</span>' +
-                                    '<span style="color: #FB005D; margin: 0 5px;">삭제</span>' +
+                                '<a href="/future/admin/detail?new=false&content_id=' + contentsList[i].id + '"><span style="color: #FB005D; margin: 0 5px;">수정</span></a>' +
+                                '<span style="color: #FB005D; margin: 0 5px;">메일발송</span>' +
+                                '<span style="color: #FB005D; margin: 0 5px;" onclick="deleteContent(' + contentsList[i].id + ')">삭제</span>' +
                                 '</td>' +
-                            '</tr>')
-                }
+                                '</tr>')
+                    }
+                })
+            }
+
+            $(document).ready(function() {
+                getContentList()
             })
         </script>
         <header style="border-bottom: 1px solid #e7e7e7; position: initial;">
@@ -70,7 +115,8 @@
                     <col style="width: auto;" />
                     <col style="width: 10%;" />
                     <col style="width: 10%;" />
-                    <col style="width: 25%;" />
+                    <col style="width: 10%;" />
+                    <col style="width: 20%;" />
                 </colgroup>
                 <tr style="border-top: 2px solid #1F2532; border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;">
                     <th style="font-weight: bold; color: #1F2532;">순서</th>
@@ -78,6 +124,7 @@
                     <th style="text-align: left; font-weight: bold; color: #1F2532;">제목</th>
                     <th style="font-weight: bold; color: #1F2532;">조회수</th>
                     <th style="font-weight: bold; color: #1F2532;">Good Job</th>
+                    <th style="font-weight: bold; color: #1F2532;">공개여부</th>
                     <th style="font-weight: bold; color: #1F2532;">액션</th>
                 </tr>
             </table>

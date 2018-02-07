@@ -118,10 +118,10 @@ class ContentAdmin(admin.ModelAdmin):
     list_per_page = 15
 
     #   목록 화면 설정 옵션들
-    list_display = ('id', 'title', 'reg_time', 'good_job', 'is_view',)
+    list_display = ('id', 'display_order', 'title', 'reg_time', 'good_job', 'is_view',)
     list_filter = ('is_view',)
     search_fields = ('title', )
-    list_display_links = ('id', 'title',)
+    list_display_links = ('display_order', 'title',)
 
     #   자세히보기 화면 설정 옵션들
     readonly_fields = ('id',)
@@ -134,6 +134,8 @@ class ContentAdmin(admin.ModelAdmin):
                 # 'category',
                 'is_view',
                 'title',
+                'display_order',
+                'hit_count',
                 # 'summary_desc',
                 # 'detail_desc',
                 # 'image_01',

@@ -76,6 +76,11 @@ class Content(models.Model):
     reg_time = models.DateTimeField(u'등록시간')
     mod_time = models.DateTimeField(auto_now=True)
     good_job = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
+    hit_count = models.IntegerField(default=0, verbose_name=u'조회수')
+
+    def contents_length():
+        return len(Content.objects.all())
+    display_order = models.PositiveSmallIntegerField(null=True, blank=True, default=contents_length)
 
     class Meta:
         db_table = 'content'
@@ -87,6 +92,9 @@ class Content(models.Model):
 
     def get_absolute_url(self):
         return '/link/%i/' % self.id
+
+    def __getitem__(self, item):
+        return self.display_order
 
     def clean(self):
 
