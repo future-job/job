@@ -5,14 +5,17 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
         <title>Future Job</title>
+        <link rel="shortcut icon" type="image/png" href="{% static 'img/symbol.png' %}">
+        <link rel="canonical" href="http://future-job.net">
+
+        <meta property="title" content="[Future Job]{{ title }}">
+        <meta property="description" content="{{description}}">
+
         <meta property="og:title" content="[Future Job]{{ title }}">
         <meta property="og:description" content="{{description}}">
         <meta property="og:image" content="http://future-job.net/future/upload/{{ thumbnail }}">
-        <link rel="shortcut icon" type="image/png" href="{% static 'img/symbol.png' %}">
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112905619-1"></script>
@@ -129,39 +132,6 @@
                 $('input.user_email')[0].value = '';
                 $('input.user_age')[0].value = '';
                 $('input.user_job')[0].value = '';
-            }
-
-            function sendEmail() {
-                var postData = { content_no: getParameterByName('content_no') };
-                if(window.location.host.indexOf('127.0.0.1') != -1) {
-                    $.ajax({
-                        url: '/api/v1/send/email/',
-                        type: 'post',
-                        data: postData,
-                        headers: {
-                            'X-CSRFToken': getCookie('csrftoken')
-                        },
-                        success: function (response) {
-                            var result = JSON.parse(response);
-                            console.log('result : ', result);
-                            if(!result.error) {
-                                alert("이메일이 발송되었습니다");
-                            } else {
-                                alert(result.msg)
-                            }
-                        }
-                    })
-                } else {
-                    $.post('/api/v1/send/email/', postData, function (response) {
-                        var result = JSON.parse(response);
-                        console.log('result : ', result);
-                        if(!result.error) {
-                            alert("이메일이 발송되었습니다");
-                        } else {
-                            alert(result.msg)
-                        }
-                    })
-                }
             }
 
             function fbShare() {

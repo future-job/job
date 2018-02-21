@@ -1,0 +1,212 @@
+{% load i18n static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Future Job</title>
+        <link rel="shortcut icon" type="image/png" href="http://future-job.net/static/img/symbol.png">
+
+        <!-- bootstrap css -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <!-- bootstrap js -->
+        <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style_admin.css' %}">
+
+        <script src="https://use.fontawesome.com/fde3c954a7.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
+    </head>
+    <body>
+        <script>
+            var memberList = [];
+
+            Date.prototype.yyyymmdd = function() {
+                var mm = this.getMonth() + 1; // getMonth() is zero-based
+                var dd = this.getDate();
+
+                return [this.getFullYear(),//아침식사 세트
+                    (mm>9 ? '' : '0') + mm,
+                    (dd>9 ? '' : '0') + dd
+                ].join('');
+            };
+
+            function JSONToCSVConvertor() {
+
+                //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+                var arrData = typeof memberList != 'object' ? JSON.parse(memberList) : memberList;
+
+                var CSV = '';
+                //Set Report title in first row or line
+
+                // CSV += ReportTitle + 'rnn';
+
+                //This condition will generate the Label/Header
+
+                var row = "";
+                //This loop will extract the label from 1st index of on array
+                for (var index in arrData[0]) {
+
+                    //Now convert each value to string and comma-seprated
+                    row += index + ',';
+                }
+
+                //append Label row with line break
+                CSV += 'No,이메일주소,구독신청일,나이,직업' + '\r\n';
+
+                //1st loop is to extract each row
+                for (var i = 0; i < arrData.length; i++) {
+                    var row = "";
+
+                    row += '"' + (i+1) + '",';
+                    row += '"' + arrData[arrData.length - 1 - i].email + '",';
+                    row += '"' + arrData[arrData.length - 1 - i].reg_time.split(' ')[0] + '",';
+                    row += '"' + arrData[arrData.length - 1 - i].age + '",';
+                    row += '"' + arrData[arrData.length - 1 - i].job + '",';
+
+                    // row.slice(0, row.length - 1);
+
+                    //add a line break after each row
+                    CSV += row + '\r\n';
+
+                }
+
+                if (CSV == '') {
+                    alert("Invalid data");
+                    return;
+                }
+
+                //Generate a file name
+                var today = new Date();
+                var fileName = "구독자_" + today.yyyymmdd();
+                //this will remove the blank-spaces from the title and replace it with an underscore
+                // fileName += ReportTitle.replace(/ /g,"_");
+
+                //Initialize file format you want csv or xls
+                //var uri = 'data:text/csv;charset=windows-1252,' + encodeURI(CSV);
+                var uri = new Blob([CSV],{type : 'text/csv'})
+                // Now the little tricky part.
+                // you can use either>> window.open(uri);
+                // but this will not work in some browsers
+                // or you will not get the correct file extension
+
+                //this trick will generate a temp <a /> tag
+
+
+                var link = document.createElement("a");
+                link.href = window.URL.createObjectURL(uri);
+
+                //set the visibility hidden so it will not effect on your web-layout
+                link.style = "visibility:hidden";
+                link.download = fileName + ".csv";
+
+                //this part will append the anchor tag and remove it after automatic click
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            function deleteMember(i) {
+                if(window.location.host.indexOf('127.0.0.1') != -1) {
+                    var email = memberList[i].email;
+                    console.log(1, email)
+                    $.ajax({
+                        url: '/api/v1/member/detail/?email='+email,
+                        type: 'delete',
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert(result.msg);
+                                location.reload();
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                } else {
+                    console.log(2, email)
+                    $.ajax({
+                        url: '/api/v1/member/detail/?email='+email,
+                        type: 'delete',
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                alert(result.msg);
+                                location.reload();
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                }
+            }
+
+            function getMemberList() {
+                $.get('/api/v1/member/list/', function(data) {
+                    memberList = data.members;
+                    console.log(memberList);
+                    for (var i = memberList.length-1; i >= 0; i--) {
+                        $("table#contentTable").append('' +
+                                '<tr style="border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;" id="content' + i+1 + '">' +
+                                '<td style="color: #1F2532;">' + (i + 1) + '</td>' +
+                                '<td style="color: #1F2532;">' + memberList[i].email + '</td>' +
+                                '<td style="text-align: left; color: #1F2532;">' + memberList[i].reg_time.split(' ')[0] + '</td>' +
+                                '<td style="color: #1F2532;">' + memberList[i].age + '</td>' +
+                                '<td style="color: #1F2532;">' + memberList[i].job + '</td>' +
+                                '<td style="color: #FB005D; cursor:pointer;" onclick="deleteMember(' + i + ')">삭제</td>' +
+                                '</tr>')
+                    }
+                })
+            }
+
+            $(document).ready(function() {
+                getMemberList();
+            })
+        </script>
+        <header style="border-bottom: 1px solid #e7e7e7; position: initial;">
+            <div class="container">
+                <div class="left">
+                    <img src="http://future-job.net/static/img/symbol.svg" alt="symbol" style="vertical-align: middle;">
+                </div>
+                <div class="left" style="font-weight: bold; margin-left: 1%;">FUTURE JOB</div>
+                <a href="/future/admin/main"><div class="left" style="font-weight: bold; margin-left: 10%; color: initial;">포스트 관리</div></a>
+                <a href="/future/admin/member"><div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">구독자 관리</div></a>
+                <a href="/"><div class="right" style="font-weight: bold; float: right; color: initial;">홈으로</div></a>
+            </div>
+        </header>
+        <div class="main_contianer" style="margin: 50px auto;">
+            <div style="width: 1140px;margin: auto;">
+                <div class="btn write" onclick="JSONToCSVConvertor()">엑셀 다운로드</div>
+            </div>
+            <h1 style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 20px">구독자 목록</h1>
+            <table id="contentTable" style="width: 100%; max-width: 1140px; margin: 30px auto 0; text-align: center; font-size: 14px;">
+                <colgroup>
+                    <col style="width: 10%;" />
+                    <col style="width: 30%;" />
+                    <col style="width: 20%;" />
+                    <col style="width: 15%;" />
+                    <col style="width: 15%;" />
+                    <col style="width: 10%;" />
+                </colgroup>
+                <tr style="border-top: 2px solid #1F2532; border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;">
+                    <th style="font-weight: bold; color: #1F2532;">순서</th>
+                    <th style="font-weight: bold; color: #1F2532;">이메일주소</th>
+                    <th style="text-align: left; font-weight: bold; color: #1F2532;">구독신청일</th>
+                    <th style="font-weight: bold; color: #1F2532;">나이</th>
+                    <th style="font-weight: bold; color: #1F2532;">직업</th>
+                    <th style="font-weight: bold; color: #1F2532;">액션</th>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

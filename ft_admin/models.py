@@ -78,9 +78,10 @@ class Content(models.Model):
     good_job = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
     hit_count = models.IntegerField(default=0, verbose_name=u'조회수')
 
-    def contents_length():
-        return len(Content.objects.all())
-    display_order = models.PositiveSmallIntegerField(null=True, blank=True, default=contents_length)
+    # def contents_length(self):
+    #     return len(Content.objects.all())
+    #
+    display_order = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
 
     class Meta:
         db_table = 'content'

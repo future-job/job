@@ -56,7 +56,10 @@ def detail_page(request):
     return render(request, 'blog/detail.html', meta_info)
 
 def custom_admin(request):
-    return render(request, 'blog/admin.html')
+    return render(request, 'blog/admin_main.html')
 
 def custom_admin_detail(request):
     return render(request, 'blog/admin_detail.html')
+
+def custom_admin_member(request):
+    return render(request, 'blog/admin_member.html')

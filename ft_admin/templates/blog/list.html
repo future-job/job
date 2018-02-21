@@ -8,10 +8,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Future Job</title>
         <link rel="shortcut icon" type="image/png" href="{% static 'img/symbol.png' %}">
+        <link rel="canonical" href="http://future-job.net">
 
         <meta property="og:title" content="Future Job">
+        <meta property="og:url" content="http://future-job.net" />
         <meta property="og:description" content="See the Future Job, Change Your Life">
         <meta property="og:image" content="{% static 'img/home.jpg' %}">
+
+        <meta property="title" content="Future Job">
+        <meta property="description" content="See the Future Job, Change Your Life">
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112905619-1"></script>
@@ -41,6 +46,56 @@
 
     <body>
         <script>
+            function detectswipe(el,func) {
+                swipe_det = new Object();
+                swipe_det.sX = 0;
+                swipe_det.sY = 0;
+                swipe_det.eX = 0;
+                swipe_det.eY = 0;
+                var min_x = 20;  //min x swipe for horizontal swipe
+                var max_x = 40;  //max x difference for vertical swipe
+                var min_y = 40;  //min y swipe for vertical swipe
+                var max_y = 50;  //max y difference for horizontal swipe
+                var direc = "";
+                var ele = document.getElementById(el);
+                ele.addEventListener('touchstart',function(e){
+                var t = e.touches[0];
+                swipe_det.sX = t.screenX;
+                swipe_det.sY = t.screenY;
+                },false);
+                ele.addEventListener('touchmove',function(e){
+                e.preventDefault();
+                var t = e.touches[0];
+                swipe_det.eX = t.screenX;
+                swipe_det.eY = t.screenY;
+                },false);
+                ele.addEventListener('touchend',function(e){
+                //horizontal detection
+                if ((((swipe_det.eX - min_x > swipe_det.sX) || (swipe_det.eX + min_x < swipe_det.sX)) && ((swipe_det.eY < swipe_det.sY + max_y) && (swipe_det.sY > swipe_det.eY - max_y)))) {
+                  if(swipe_det.eX - swipe_det.sX > 80) direc = "r";
+                  else if(swipe_det.sX - swipe_det.eX > 80) direc = "l";
+                }
+                //vertical detection
+                if ((((swipe_det.eY - min_y > swipe_det.sY) || (swipe_det.eY + min_y < swipe_det.sY)) && ((swipe_det.eX < swipe_det.sX + max_x) && (swipe_det.sX > swipe_det.eX - max_x)))) {
+                  if(swipe_det.eY > swipe_det.sY) direc = "d";
+                  else direc = "u";
+                }
+
+                if (direc != "") {
+                  if(typeof func == 'function') func(el,direc);
+                }
+                direc = "";
+                },false);
+            }
+
+            function myfunction(el,d) {
+                if(d == 'r') {
+                    $('.carousel-control-prev').click();
+                } else if(d == 'l') {
+                    $('.carousel-control-next').click();
+                }
+                console.log("you swiped on element with id '"+el+"' to "+d+" direction");
+            }
             function joinUser() {
                 const regexObj = {
                     email : /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
@@ -227,12 +282,16 @@
             })
 
             function modalOpen() {
-                document.getElementsByClassName('modal_menu_close')[0].click();
+                document.getElementsByClasfisName('modal_menu_close')[0].click();
                 document.body.className="modal-open";
             }
 
             $(document).ready(function() {
-                $('.carousel-item').css('height', window.innerHeight + 'px');
+                setTimeout(function(){
+                    $('.carousel-item').css('height', window.innerHeight + 'px');
+                }, 500)
+
+                detectswipe('Inner',myfunction);
             })
 
         </script>
@@ -254,7 +313,7 @@
         <div class="main_contianer">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
                 <ul class="carousel-indicators"></ul>
-                <div class="carousel-inner"></div>
+                <div class="carousel-inner" id="Inner"></div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" onclick="activeScroll()">
                     <img src="{% static 'img/left.svg' %}" alt="left">
                 </a>
@@ -294,7 +353,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>coo
 
         <!-- 구독하기 Modal -->
         <div class="modal fade" id="Modal_subscription" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -328,6 +387,6 @@
                 </div>
             </div>
         </div>
-        
+
     </body>
 </html>

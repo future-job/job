@@ -135,6 +135,89 @@ class ContentListView(View):
 
         return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
 
+class MemberListView(View):
+    def get(self, request, **kwargs):
+
+        result = dict()
+        members = Member.objects.all().order_by('reg_time')
+        member_list = []
+
+        for i, value in enumerate(members):
+            print str(value.reg_time)
+            member_list.append({
+                'job': value.job,
+                'email': value.email,
+                'age': value.age,
+                'reg_time': str(value.reg_time)
+            })
+
+        print member_list
+
+        result['members'] = member_list
+        result['error'] = 0
+
+        return HttpResponse(json.dumps(result, ensure_ascii=True), content_type='application/json')
+
+
+class MemberDetailView(View):
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.method == 'PUT':
+            if hasattr(request, '_post'):
+                del request._post
+                del request._files
+            try:
+                request.method = "POST"
+                request._load_post_and_files()
+                request.method = "PUT"
+            except AttributeError:
+                print 'Attribute Error..???'
+                request.META['REQUEST_METHOD'] = 'POST'
+                request._load_post_and_files()
+                request.META['REQUEST_METHOD'] = 'PUT'
+
+            request.PUT = request.POST
+
+        elif request.method == 'DELETE':
+            if hasattr(request, '_post'):
+                del request._post
+                del request._files
+            try:
+                request.method = "POST"
+                request._load_post_and_files()
+                request.method = "DELETE"
+            except AttributeError:
+                request.META['REQUEST_METHOD'] = 'POST'
+                request._load_post_and_files()
+                request.META['REQUEST_METHOD'] = 'DELETE'
+
+            request.DELETE = request.POST
+
+        return super(MemberDetailView, self).dispatch(request, *args, **kwargs)
+
+    def delete(self, request, **kwargs):
+
+        member_email = request.GET.get('email', -1)
+        member = Member.objects.filter(email=member_email)
+        warning_msg = member_email + "에 해당하는 구독자가 없습니다."
+
+        print "Delete : ", member_email, member
+
+        if member.exists() is False:
+            result = dict(error=600, msg=warning_msg, data=dict())
+            return HttpResponse(json.dumps(result, ensure_ascii=False))
+        else:
+
+            try:
+                Member.objects.get(email=member_email).delete()
+            except:
+                result = dict(error=600, msg="삭제에 실패 했습니다", data=dict())
+                return HttpResponse(json.dumps(result, ensure_ascii=False))
+
+            result = dict(error=0, msg=u"구독자 목록에서 성공적으로 삭제되었습니다", data=dict())
+            return HttpResponse(json.dumps(result, ensure_ascii=False))
+
+
 class AdminContentListView(View):
     def dispatch(self, request, *args, **kwargs):
 
@@ -286,7 +369,7 @@ class AdminContentDetailView(View):
         # print category_list
 
         for i, value in enumerate(categories):
-            print value['name'], value['id']
+            # print value['name'], value['id']
             category_list.append({
                 'id' : value['id'],
                 'name' : value['name'],
@@ -761,7 +844,6 @@ class SendEmailView(View):
         member = Member.objects.values('email')
         member_list = []
         for i, value in enumerate(member):
-            print i, value[u'email']
             member_list.append(value[u'email'])
             #     category_id = ContentCategory.objects.get(content_id=value.id).category_id
             #     tag = Category.objects.get(id=category_id).name
@@ -774,7 +856,6 @@ class SendEmailView(View):
             #     'thumbnail': str(ContentDetail.objects.get(content_id=value.id).image_01),
             #     'tag': tag
             # })
-        print "hello : ", member_list
         sendDetailEmail(member_list, content_id)
 
 

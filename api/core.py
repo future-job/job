@@ -3,6 +3,8 @@ import os, urllib, json, base64, hashlib, sys, re
 
 from django.conf import settings
 from api.tasks import send_email
+from ft_admin.models import Category, Content, ContentDetail, ContentCategory, Member
+
 
 MEDIA_ROOT = getattr(settings, 'MEDIA_ROOT')
 # REDIS_SERVER_IP = getattr(settings, 'REDIS_SERVER_IP')
@@ -20,13 +22,28 @@ def sendDetailEmail(member, content_id):
 
     msg = open(MAIL_TEMPLATES_DIR + 'detail.html', 'r').read()
 
-    print member, content_id, msg
+    content = Content.objects.get(id=content_id)
 
-    title = '테스트'
-    msg = msg.replace('{$title}', '')
-    msg = msg.replace('{tag}', '')
-    msg = msg.replace('{reg_date}', '')
-    msg = msg.replace('{descript_html}', '')
+    if(len(ContentCategory.objects.filter(content_id=content_id))):
+        category_id = ContentCategory.objects.get(content_id=content_id).category_id
+        tag = Category.objects.get(id=category_id).name
+    else:
+        tag = ''
+
+    detail_desc = ContentDetail.objects.get(content_id=content_id).detail_desc
+    thumbnail= str(ContentDetail.objects.get(content_id=content_id).image_01)
+
+    title = '[FutureJob] ' + content.title
+    if(tag == ''):
+        msg = msg.replace('{$tag_display}', 'none')
+    else :
+        msg = msg.replace('{$tag_display}', 'inline-block')
+    msg = msg.replace('{$title}', content.title)
+    msg = msg.replace('{$tag}', tag)
+    msg = msg.replace('{$reg_date}', str(content.reg_time).split(' ')[0])
+    msg = msg.replace('{$descript_html}', detail_desc)
+    msg = msg.replace('{$image_url}', thumbnail)
+    # print msg
     send_email(title, msg, member)
 
 # def sendEventMailOrderComplete(order):

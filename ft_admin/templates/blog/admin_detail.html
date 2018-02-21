@@ -32,7 +32,24 @@
         <!-- include summernote css/js -->
         <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
         <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+        <style>
+            .content_container {
+                margin-top: 30px;
+            }
 
+            .container_title {
+                font-weight: bold;
+                font-size: 18px;
+                margin-top: 40px;
+
+            }
+
+            select {
+                background-image: url(http://future-job.net/static/img/m-pay-dropdown-arrow@2x.png);
+                background-position: center right 15px;
+                background-repeat: no-repeat;
+            }
+        </style>
     </head>
     <body>
         <script>
@@ -119,7 +136,7 @@
                             console.log('result : ', result);
                             if(!result.error) {
                                 alert(result.msg);
-                                location.href = '/future/admin/';
+                                location.href = '/future/admin/main/';
                             } else {
                                 alert(result.msg)
                             }
@@ -135,7 +152,7 @@
                             console.log('result : ', result);
                             if(!result.error) {
                                 alert(result.msg);
-                                location.href = '/future/admin/';
+                                location.href = '/future/admin/main/';
                             } else {
                                 alert(result.msg)
                             }
@@ -178,7 +195,7 @@
                         $('.summary_textarea')[0].value = response.summary_desc.replace(/<br\/>/g, '\n');
                         $('.note-editable')[0].innerHTML = response.detail_desc;
                         $('.thumbnail_container').append('<div>' + '기존 썸네일' + '</div>');
-                        $('.thumbnail_container').append('<div style="height: 300px; width: 100%; background-repeat: no-repeat; background-size: contain; background-position: left, center; background-image: url(/future/upload/' + response.thumbnail + ')"></div>');
+                        $('.thumbnail_container').append('<div style="margin-top: 10px; height: 300px; width: 100%; background-repeat: no-repeat; background-size: contain; background-position: left, center; background-image: url(/future/upload/' + response.thumbnail + ')"></div>');
                     })
                 }
             }
@@ -200,24 +217,24 @@
                     <img src="http://future-job.net/static/img/symbol.svg" alt="symbol" style="vertical-align: middle;">
                 </div>
                 <div class="left" style="font-weight: bold; margin-left: 1%;">FUTURE JOB</div>
-                <a href="/future/admin"><div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">포스트 관리</div></a>
+                <a href="/future/admin/main"><div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">포스트 관리</div></a>
                 <a href="/future/admin/member"><div class="left" style="font-weight: bold; margin-left: 10%; color: initial;">구독자 관리</div></a>
                 <a href="/"><div class="right" style="font-weight: bold; float: right; color: initial;">홈으로</div></a>
             </div>
         </header>
         <div class="main_contianer" style="max-width: 1140px; margin: 50px auto;">
-            <h1 id="postTitle" style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 20px; text-align: center;">포스트 수정</h1>
+            <h1 id="postTitle" style="max-width: 1140px; margin: 50px auto; font-weight: bold; font-size: 24px; text-align: center;">포스트 수정</h1>
             <div class="is_view_container">
                 <input type="checkbox" class="is_view" name="is_view"/>
-                <label for="is_view" style="">공개여부</label>
+                <label for="is_view" style="margin-left: 10px; font-weight: bold;">공개여부</label>
             </div>
-            <div class="form-group">
+            <!--div class="form-group">
                 <div class="row">
                     <div class="col-md-8">
                         <div id="datetimepicker"></div>
                     </div>
                 </div>
-            </div>
+            </div-->
             <div class="order_container content_container">
                 <h3 class="container_title">순위(필수)</h3>
                 <select class="order_select" style="width: 100%"></select>
@@ -232,7 +249,7 @@
             </div>
             <div class="summary_container content_container">
                 <h3 class="container_title">요약글</h3>
-                <textarea class="summary_textarea" style="width: 100%"></textarea>
+                <textarea class="summary_textarea" style="width: 100%; line-height: 1.5;"></textarea>
             </div>
             <div class="thumbnail_container content_container">
                 <h3 class="container_title">썸네일 이미지</h3>

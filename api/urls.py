@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url, include
-from views import ContentListView, ContentDetailView, MemberJoinView, ServerStatusView, ContentLikeView, SendEmailView, AdminContentListView, AdminContentDetailView
+from views import ContentListView, ContentDetailView, MemberJoinView, ServerStatusView, ContentLikeView, SendEmailView, AdminContentListView, AdminContentDetailView, MemberListView, MemberDetailView
 
 # from rest_framework import routers
 
@@ -34,8 +34,10 @@ urlpatterns = [
 
     #   Category
     url(r'^v1/content/list/$', ContentListView.as_view(), name="main_product_view"),
+    url(r'^v1/member/list/$', MemberListView.as_view(), name="main_product_view"),
     url(r'^v1/content/detail/$', ContentDetailView.as_view(), name="shop_product_detail_view"),
     url(r'^v1/member/join/$', MemberJoinView.as_view(), name="shop_product_detail_view"),
+    url(r'^v1/member/detail/$', MemberDetailView.as_view(), name="shop_product_detail_view"),
     url(r'^v1/content/like/$', ContentLikeView.as_view(), name="shop_product_detail_view"),
     url(r'^v1/send/email/$', SendEmailView.as_view(), name="shop_product_detail_view"),
 

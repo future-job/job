@@ -1,35 +1,33 @@
-<link rel="stylesheet" type="text/css" href="http://future-job.net/static/css/style.css">
-<header class="detail_header" style="background-color: white; border-bottom: 1px solid #eee;">
-    <div class="container">
+<header class="detail_header" style="background-color: white; border-bottom: 1px solid #eee; height: 70px; line-height: 70px;">
+    <div class="container" style="padding: 0 20px;">
         <div class="left">
             <a href="http://future-job.net/">
-                <img src="http://future-job.net/static/img/symbol.svg" alt="symbol">
-                <img src="http://future-job.net/static/img/logo_b.svg" alt="logo_white">
+                <img src="http://future-job.net/static/img/symbol.svg" alt="symbol" style="width: 40px; vertical-align: middle;">
+                <img src="http://future-job.net/static/img/logo_b.svg" alt="logo_white" style="width: 90px; margin-left: 10px; vertical-align: middle;">
             </a>
         </div>
     </div>
 </header>
 
 <div class="detail_contents">
-    <div class="section banner" style='background : linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("{$image_url}")'>
-        <div class="container" style="max-width: 1140px; width: auto;">
-            <h2 class="title">{$title}</h2>
-            {$tag}
-            //<h5 class="tag">인터뷰</h5>
-            <h5 class="date">{$reg_date}</h5>
+    <div class="section banner" style='background : linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(http://future-job.net/future/upload/"{$image_url}"); min-height: 100px; width: 100%; max-height: 400px; background-position: center; background-size: cover; background-repeat: no-repeat;'>
+        <div class="container" style="max-width: 1140px; width: auto; padding: 0 15px;">
+            <h2 class="title" style="margin: 10px 0; padding-top: 30px; font-size: 2rem; font-weight: bold;">{$title}</h2>
+            <h5 class="tag" style="color: #FF2570; border: 2px solid #FF2570; border-radius: 20px; padding: 6px 10px; font-size: 0.8rem; display: {$tag_display};">{$tag}</h5>
+            <h5 class="date" style="font-size: 0.9rem; display: inline-block; margin-left: 10px; margin-bottom: 30px;">{$reg_date}</h5>
         </div>
     </div>
 
-    <div class="section">
-        <div class="container">
-            <p class="contents">
+    <div class="section" style="font-size: 1rem; vertical-align: baseline;">
+        <div class="container" style="max-width: 960px; padding: 0 20px;">
+            <p class="contents" style="line-height: 30px; font-size: 1rem; color: #000; margin: 50px 0;">
                 {$descript_html}
             </p>
         </div>
     </div>
 </div>
-<footer>
-    <div class="container">
-        <h5>© 2017 Future-Job All rights reserved</h5>
+<footer style="background-color: #f1f1f1; height: 70px; line-height: 70px; width: 100%;">
+    <div class="container" style="max-width: 960px; padding: 0 20px;">
+        <h5 style="font-size: 0.9rem; display: inline-block; font-weight: normal;">© 2017 Future-Job All rights reserved</h5>
     </div>
 </footer>

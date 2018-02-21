@@ -654,7 +654,8 @@ header {
       line-height: 30px;
       font-size: 1rem;
       color: #000;
-      margin: 50px 0; }
+      margin: 50px auto;
+      max-width: 760px; }
     /* line 682, /Users/SONG/Desktop/future_job/css/style.scss */
     .detail_contents .section .container .good_btn_area {
       text-align: center;
@@ -1365,3 +1366,20 @@ footer {
         display: none; } }
 
 /*# sourceMappingURL=style.css.map */
+
+.swipe {
+  display:none;
+}
+
+@media only screen and (max-width: 500px) {
+  .swipe {
+    display: block;
+    width: 100vw;
+    height: 70vh;
+    opacity: 0.3;
+    background-color: red;
+    z-index: 9999999999;
+    position: fixed;
+    top: 30vh;
+  }
+}

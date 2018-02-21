@@ -18,6 +18,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
+        <script src="https://unpkg.com/sweetalert2@7.12.11/dist/sweetalert2.all.js"></script>
+
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style_admin.css' %}">
 
@@ -26,6 +28,20 @@
     </head>
     <body>
         <script>
+            function getCookie(c_name) {
+                if (document.cookie.length > 0){
+                    var c_start = document.cookie.indexOf(c_name + "=");
+                    var c_end = false;
+                    if (c_start != -1) {
+                        c_start = c_start + c_name.length + 1;
+                        c_end = document.cookie.indexOf(";", c_start);
+                        if (c_end == -1) c_end = document.cookie.length;
+                        return decodeURI(document.cookie.substring(c_start,c_end));
+                    }
+                }
+                return "";
+            }
+
             function deleteContent(id) {
                 if(window.location.host.indexOf('127.0.0.1') != -1) {
                     $.ajax({
@@ -65,6 +81,47 @@
                 }
             }
 
+            function sendEmail(id) {
+                swal({
+                    title: '이메일을 발송중입니다',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    onOpen: () => {
+                        swal.showLoading()
+                    }
+                })
+                var postData = { content_no: id };
+                if(window.location.host.indexOf('127.0.0.1') != -1) {
+                    $.ajax({
+                        url: '/api/v1/send/email/',
+                        type: 'post',
+                        data: postData,
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        success: function (response) {
+                            var result = JSON.parse(response);
+                            console.log('result : ', result);
+                            if(!result.error) {
+                                swal("이메일이 발송되었습니다", "", "success");
+                            } else {
+                                alert(result.msg)
+                            }
+                        }
+                    })
+                } else {
+                    $.post('/api/v1/send/email/', postData, function (response) {
+                        var result = JSON.parse(response);
+                        console.log('result : ', result);
+                        if(!result.error) {
+                            swal("이메일이 발송되었습니다", "", "success");
+                        } else {
+                            alert(result.msg)
+                        }
+                    })
+                }
+            }
+
             function getContentList() {
                 $.get('/api/v1/admin/content/list/', function (data) {
                     var contentsList = data.contents;
@@ -74,14 +131,14 @@
                                 '<tr style="border-bottom: 1px solid #EFEFEF; height: 60px; line-height: 60px;" id="content' + contentsList[i].id + '">' +
                                 '<td style="color: #1F2532;">' + (contentsList[i].index + 1) + '</td>' +
                                 '<td style="color: #1F2532;">' + (contentsList[i].tag && contentsList[i].tag != '일반' ? contentsList[i].tag : '-') + '</td>' +
-                                '<td style="text-align: left; color: #1F2532;">' + contentsList[i].title + '</td>' +
+                                '<td style="text-align: left; color: #1F2532;"><a href="/future/admin/detail?new=false&content_id=' + contentsList[i].id + '" style="text-decoration: none; color: inherit;" >' + contentsList[i].title + '</a></td>' +
                                 '<td style="color: #1F2532;">' + contentsList[i].hit_count + '</td>' +
                                 '<td style="color: #1F2532;">' + contentsList[i].good_job + '</td>' +
                                 '<td style="color: #1F2532;">' + (contentsList[i].is_view == true ? 'O' : 'X') + '</td>' +
                                 '<td style="color: #1F2532;">' +
-                                '<a href="/future/admin/detail?new=false&content_id=' + contentsList[i].id + '"><span style="color: #FB005D; margin: 0 5px;">수정</span></a>' +
-                                '<span style="color: #FB005D; margin: 0 5px;">메일발송</span>' +
-                                '<span style="color: #FB005D; margin: 0 5px;" onclick="deleteContent(' + contentsList[i].id + ')">삭제</span>' +
+                                '<a href="/future/admin/detail?new=false&content_id=' + contentsList[i].id + '" style="text-decoration: none;" ><span style="color: #FB005D; margin: 0 5px;">수정</span></a>' +
+                                '<span style="color: #FB005D; margin: 0 5px; cursor:pointer; " onclick="sendEmail(' + contentsList[i].id + ')">메일발송</span>' +
+                                '<span style="color: #FB005D; margin: 0 5px; cursor:pointer; " onclick="deleteContent(' + contentsList[i].id + ')">삭제</span>' +
                                 '</td>' +
                                 '</tr>')
                     }
@@ -98,7 +155,7 @@
                     <img src="http://future-job.net/static/img/symbol.svg" alt="symbol" style="vertical-align: middle;">
                 </div>
                 <div class="left" style="font-weight: bold; margin-left: 1%;">FUTURE JOB</div>
-                <a href="/future/admin"><div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">포스트 관리</div></a>
+                <a href="/future/admin/main"><div class="left" style="font-weight: bold; margin-left: 10%; color: #FF2570;">포스트 관리</div></a>
                 <a href="/future/admin/member"><div class="left" style="font-weight: bold; margin-left: 10%; color: initial;">구독자 관리</div></a>
                 <a href="/"><div class="right" style="font-weight: bold; float: right; color: initial;">홈으로</div></a>
             </div>
