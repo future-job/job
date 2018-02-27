@@ -115,7 +115,7 @@
                 postData.append( 'summary_desc', $('.summary_textarea')[0].value.replace(/\n/g, '<br/>'));
                 postData.append( 'thumbnail', $('#thumbnail')[0].files[0]||'');
                 postData.append( 'detail_desc', $('.note-editable')[0].innerHTML);
-                postData.append( 'reg_time', $("#datetimepicker").data('date').split(' ')[0].split('/')[2]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[1]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[0]+' '+$("#datetimepicker").data('date').split(' ')[1]+':00+09:00');
+                postData.append( 'reg_time', $("#datetimepicker").data('date').split(' ')[0].split('/')[2]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[0]+'-'+$("#datetimepicker").data('date').split(' ')[0].split('/')[1]+' '+$("#datetimepicker").data('date').split(' ')[1]+':00+09:00');
                 postData.append( 'new_post', getParameterByName('new') == 'true' ? 1 : 0);
                 postData.append( 'order', $('.order_select').val());
                 postData.append( 'origin_order', originOrder);
@@ -147,6 +147,8 @@
                         url: '/api/v1/admin/content/detail/post/',
                         type: getParameterByName('new') == 'true' ? 'post' : 'put',
                         data: postData,
+                        processData: false,
+                        contentType: false,
                         success: function (response) {
                             var result = JSON.parse(response);
                             console.log('result : ', result);
@@ -228,13 +230,13 @@
                 <input type="checkbox" class="is_view" name="is_view"/>
                 <label for="is_view" style="margin-left: 10px; font-weight: bold;">공개여부</label>
             </div>
-            <!--div class="form-group">
+            <div class="form-group displaynone">
                 <div class="row">
                     <div class="col-md-8">
                         <div id="datetimepicker"></div>
                     </div>
                 </div>
-            </div-->
+            </div>
             <div class="order_container content_container">
                 <h3 class="container_title">순위(필수)</h3>
                 <select class="order_select" style="width: 100%"></select>

@@ -109,7 +109,7 @@ class ContentListView(View):
     def get(self, request, **kwargs):
         result = dict()
 
-        contents = Content.objects.filter(is_view=True).order_by('-id')
+        contents = Content.objects.filter(is_view=True).order_by('display_order')
         contents_list = []
 
         for i, value in enumerate(contents):
@@ -267,6 +267,9 @@ class AdminContentListView(View):
                 tag = Category.objects.get(id=category_id).name
             else:
                 tag = ''
+
+            print value.display_order, value.title
+
             contents_list.append({
                 'title': value.title,
                 'index': i,
@@ -277,7 +280,6 @@ class AdminContentListView(View):
                 'is_view': value.is_view,
                 'display_order': value.display_order
             })
-        print ('contents_list : %s', contents_list)
 
         # contents_temp = serializers.serialize('json', contents_list)
 
@@ -462,6 +464,7 @@ class AdminContentDetailView(View):
             return HttpResponse(json.dumps(result, ensure_ascii=False))
 
         content.reg_time = reg_time
+        content.mod_time = reg_time
 
         category_no = request.POST.get('category', '')
         if category_no is '':
@@ -486,6 +489,8 @@ class AdminContentDetailView(View):
 
         order = int(request.POST.get('order', 0))
         content.display_order = order
+        content.good_job = 0
+        content.hit_count = 0
 
         contents_query = Content.objects.all()
         query_order = contents_query.values('display_order', 'id')
@@ -513,6 +518,7 @@ class AdminContentDetailView(View):
                 pass
 
         detail.image_01 = thumbnail_url
+
         try:
             content.save()
             detail.content = content

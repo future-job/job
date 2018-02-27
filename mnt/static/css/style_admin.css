@@ -12,10 +12,10 @@ menu, nav, output, ruby, section, summary, time, mark, audio, video {
   border: 0;
   font-size: 1rem;
   font: inherit;
-  vertical-align: baseline;
-  text-decoration: none;
+  /*vertical-align: baseline;*/
+  /*text-decoration: none;*/
   border-radius: 0;
-  font-weight: normal; }
+  /*font-weight: normal;*/ }
 
 /* line 20, /Users/SONG/Desktop/future_job/css/style.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -52,8 +52,6 @@ table {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-<<<<<<< 760b227b4bfc5b89348518afb2695714c03006a3
-=======
 .content_container {
   margin : 30px 0;
 }
@@ -108,7 +106,6 @@ input#thumbnail {
 .note-editable {
   line-height: 1.5;
 }
->>>>>>> [Fix]Version in 180204
 
 .is_view_container input[type="checkbox"] {
     -moz-appearance: none;
