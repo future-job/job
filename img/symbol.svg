@@ -1,25 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
-<title>Group 10</title>
-<desc>Created with Sketch.</desc>
-<g id="v3">
-	<g id="Post-_x3E_-detail" transform="translate(-20.000000, -15.000000)">
-		<g id="Group-5">
-			<g id="Group-4" transform="translate(20.000000, 15.000000)">
-				<g id="Group-10">
-					<path id="Rectangle-2" fill="#FF2570" d="M4,0h32c2.209,0,4,1.791,4,4v32c0,2.209-1.791,4-4,4H4c-2.209,0-4-1.791-4-4V4
-						C0,1.791,1.791,0,4,0z"/>
-					<g enable-background="new    ">
-						<path fill="#FFFFFF" d="M15.353,14.271v3.433h4.368v3.433h-4.368V28H11.92V10.839h8.569v3.432H15.353z"/>
-						<path fill="#FFFFFF" d="M20.943,24.567h3.289c0.984,0,1.729-0.768,1.729-1.728V10.839h3.479V22.84
-							c0,3.504-1.728,5.16-5.112,5.16h-3.385V24.567z"/>
-					</g>
-				</g>
-			</g>
-		</g>
-	</g>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="logo">
+            <g>
+                <rect id="Rectangle-2" fill="#FF2570" x="0" y="0" width="40" height="40" rx="4"></rect>
+                <polygon id="Clip-5" fill="#FFFFFF" points="14.1608846 30.10928 18.8635769 30.10928 18.8635769 35 14.1608846 35"></polygon>
+                <path d="M25.6677938,7.07702 L10.4251134,7.07702 C10.1904742,7.07702 10.0001649,7.26182 10.0001649,7.48962 L10.0001649,27.56922 C10.0001649,27.79702 10.1904742,27.98142 10.4251134,27.98142 L13.8851134,27.98142 C14.1197526,27.98142 14.3100619,27.79702 14.3100619,27.56922 L14.3100619,20.35682 C14.3100619,20.12922 14.5005773,19.94442 14.7354227,19.94442 L21.108,19.94442 C21.3426392,19.94442 21.5329485,19.75982 21.5329485,19.53202 L21.5329485,16.17582 C21.5329485,15.94802 21.3426392,15.76362 21.108,15.76362 L14.7354227,15.76362 C14.5005773,15.76362 14.3100619,15.57902 14.3100619,15.35102 L14.3100619,11.67042 C14.3100619,11.44262 14.5005773,11.25782 14.7354227,11.25782 L25.2426392,11.25782 C25.4774845,11.25782 25.6677938,11.44262 25.6677938,11.67042 L25.6677938,21.69562 C25.6677938,22.86502 24.7032577,23.80062 23.4675876,23.80062 L19.7632577,23.80062 C19.5286186,23.80062 19.3381031,23.98522 19.3381031,24.21302 L19.3381031,27.56922 C19.3381031,27.79702 19.5286186,27.98142 19.7632577,27.98142 L23.588,27.98142 C27.1148041,27.98142 29.948,25.17482 29.948,21.69562 L29.948,11.25782 L29.948,7.48962 C29.948,7.26182 29.7574845,7.07702 29.5226392,7.07702 L25.6677938,7.07702 Z" id="Fill-1" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
 </svg>
