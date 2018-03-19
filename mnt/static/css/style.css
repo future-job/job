@@ -468,6 +468,7 @@ header {
         border: 1px solid #FF2570;
         border-radius: 20px;
         color: #FF2570;
+        background-color: #ffffff;
         font-size: 0.8rem; }
       /* line 443, /Users/SONG/Desktop/future_job/css/style.scss */
       .main_contianer .carousel .carousel-inner .carousel-item .contents_common p {
@@ -617,6 +618,7 @@ header {
     .detail_contents .section .container .tag {
       display: inline-block;
       color: #FF2570;
+      background-color: #ffffff;
       border: 2px solid #FF2570;
       border-radius: 20px;
       padding: 6px 10px;
